@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2 anos — Nosso Universo</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Estrelas de fundo -->
+  <div class="stars" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#inicio">💗 Nosso Universo</a>
+    <nav class="nav">
+      <a href="#timeline">Linha do tempo</a>
+      <a href="#galeria">Galeria</a>
+      <a href="#motivos">Motivos</a>
+      <a href="#acordo">Acordo</a>
+      <a href="#final">Final</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+  </header>
+
+  <nav class="mobile-nav" id="mobileNav">
+    <a href="#timeline" class="mnav-link">Linha do tempo</a>
+    <a href="#galeria" class="mnav-link">Galeria</a>
+    <a href="#motivos" class="mnav-link">Motivos</a>
+    <a href="#acordo" class="mnav-link">Acordo</a>
+    <a href="#final" class="mnav-link">Final</a>
+  </nav>
+
+  <main>
+
+    <!-- ========= HERO ========= -->
+    <section id="inicio" class="hero">
+      <div class="hero__bg" aria-hidden="true"></div>
+
+      <div class="hero__content fade-in">
+        <p class="tag">✨ 2 anos de namoro ✨</p>
+        <h1>Você é a minha<br>teoria favorita.</h1>
+        <div class="hero__buttons">
+          <a class="btn btn--primary" href="#timeline">Começar ↓</a>
+          <button class="btn btn--ghost" id="btnSurpresa" type="button">💌 Surpresa</button>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <span class="stat__num" id="daysCount">—</span>
+            <span class="stat__label">dias juntos</span>
+          </div>
+          <div class="stat">
+            <span class="stat__num" id="hoursCount">—</span>
+            <span class="stat__label">horas de amor</span>
+          </div>
+          <div class="stat">
+            <span class="stat__num">∞</span>
+            <span class="stat__label">motivos pra te amar</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========= TIMELINE ========= -->
+    <section id="timeline" class="section reveal">
+      <h2>🧶 Nossa linha do tempo</h2>
+      <p class="section__subtitle">Momentos que viraram constelação.</p>
+
+      <div class="timeline-track">
+
+        <div class="tl-item reveal">
+          <div class="tl-dot"></div>
+          <div class="card tl-card">
+            <span class="tl-date">13/06/2024</span>
+            <h3>✨ O começo</h3>
+            <p>Tudo começou aqui — o dia mais importante da nossa história. O universo conspirou pra gente.</p>
+            <div class="tl-img-wrap">
+              <img src="assets/tl1.svg" alt="O começo" class="tl-img" onerror="this.parentElement.classList.add('tl-img-wrap--empty')">
+              <label class="tl-img-label">📷 Adicione uma foto</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-item tl-item--right reveal">
+          <div class="tl-dot"></div>
+          <div class="card tl-card">
+            <span class="tl-date">🍿 Maratona Big Bang</span>
+            <h3>Bazinga!</h3>
+            <p>Aquele episódio que a gente assistiu junto e ficou citando por dias. "No se puede."</p>
+            <div class="tl-img-wrap">
+              <img src="assets/tl2.svg" alt="Maratona Big Bang" class="tl-img" onerror="this.parentElement.classList.add('tl-img-wrap--empty')">
+              <label class="tl-img-label">📷 Adicione uma foto</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-item reveal">
+          <div class="tl-dot"></div>
+          <div class="card tl-card">
+            <span class="tl-date">💗 Nosso favorito</span>
+            <h3>Um dia simples, perfeito</h3>
+            <p>Um dia que foi especial não pelo que aconteceu, mas por estar com você.</p>
+            <div class="tl-img-wrap">
+              <img src="assets/tl3.svg" alt="Nosso favorito" class="tl-img" onerror="this.parentElement.classList.add('tl-img-wrap--empty')">
+              <label class="tl-img-label">📷 Adicione uma foto</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-item tl-item--right reveal">
+          <div class="tl-dot"></div>
+          <div class="card tl-card">
+            <span class="tl-date">12/05/2026</span>
+            <h3>🎂 2 anos!</h3>
+            <p>Dois anos que provam que a gente funciona em qualquer universo. Aqui estamos. 💜</p>
+            <div class="tl-img-wrap">
+              <img src="assets/tl4.svg" alt="2 anos" class="tl-img" onerror="this.parentElement.classList.add('tl-img-wrap--empty')">
+              <label class="tl-img-label">📷 Adicione uma foto</label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========= GALERIA ========= -->
+    <section id="galeria" class="section reveal">
+      <h2>📸 Galeria</h2>
+      <p class="section__subtitle">Provas científicas de que a gente combina.</p>
+
+      <div class="grid gallery">
+        <button class="photo" data-caption="Nosso primeiro momento juntos 💗">
+          <img src="assets/foto1.svg" alt="Foto 1" onerror="this.parentElement.classList.add('photo--placeholder')">
+          <span class="photo__overlay">💗</span>
+        </button>
+        <button class="photo" data-caption="Uma aventura que só nós dois entendemos ✨">
+          <img src="assets/foto2.svg" alt="Foto 2" onerror="this.parentElement.classList.add('photo--placeholder')">
+          <span class="photo__overlay">✨</span>
+        </button>
+        <button class="photo" data-caption="Felicidade em formato de nós dois 🌸">
+          <img src="assets/foto3.svg" alt="Foto 3" onerror="this.parentElement.classList.add('photo--placeholder')">
+          <span class="photo__overlay">🌸</span>
+        </button>
+        <button class="photo" data-caption="Um dia simples que foi tudo 🧶">
+          <img src="assets/foto4.svg" alt="Foto 4" onerror="this.parentElement.classList.add('photo--placeholder')">
+          <span class="photo__overlay">🧶</span>
+        </button>
+        <button class="photo" data-caption="O melhor lugar é do seu lado 💜">
+          <img src="assets/foto5.svg" alt="Foto 5" onerror="this.parentElement.classList.add('photo--placeholder')">
+          <span class="photo__overlay">💜</span>
+        </button>
+        <button class="photo" data-caption="2 anos de sorrisos e eu ainda me apaixono todo dia 🌙">
+          <img src="assets/foto6.svg" alt="Foto 6" onerror="this.parentElement.classList.add('photo--placeholder')">
+          <span class="photo__overlay">🌙</span>
+        </button>
+      </div>
+
+      <p class="hint gallery-hint">💡 Substitua os arquivos em <code>assets/</code> pelas suas fotos.</p>
+    </section>
+
+    <!-- ========= MOTIVOS ========= -->
+    <section id="motivos" class="section reveal">
+      <h2>🧠 Motivos por que eu te amo</h2>
+      <p class="section__subtitle">Uma lista quase tão longa quanto as teorias do Sheldon.</p>
+
+      <ol class="reasons" id="reasonsList">
+        <li class="reason-item">Seu jeito de olhar pra mim como se eu fosse a coisa mais importante do universo.</li>
+        <li class="reason-item">Como você me acalma em qualquer tempestade, só com sua presença.</li>
+        <li class="reason-item">Nossas piadas internas que mais ninguém entende (e ainda bem).</li>
+        <li class="reason-item">Quando você sorri e eu esqueço o resto do mundo.</li>
+        <li class="reason-item">Você é meu lugar favorito onde quer que estejamos.</li>
+        <li class="reason-item">Sua força — mesmo quando acha que não tem nenhuma.</li>
+        <li class="reason-item">O jeito que você cuida de quem ama.</li>
+      </ol>
+
+      <div class="motivo-wrapper">
+        <button class="btn btn--primary" id="btnAdicionarMotivo" type="button">
+          💡 Gerar um motivo aleatório
+        </button>
+        <p class="hint motivo-box" id="motivoRandom"></p>
+      </div>
+    </section>
+
+    <!-- ========= ACORDO ========= -->
+    <section id="acordo" class="section reveal">
+      <h2>📜 Acordo de Namoro</h2>
+      <p class="section__subtitle">Com cláusulas românticas e zero chance de apelação. (Sheldon aprovaria.)</p>
+
+      <div class="card contract">
+        <div class="contract-header">
+          <span class="formula">E = mc² + amor</span>
+          <p>Este documento vincula as partes abaixo identificadas em perpetuidade romântica, em quaisquer universos paralelos possíveis.</p>
+        </div>
+
+        <ul class="clauses">
+          <li><strong>§ 1 —</strong> Abraços são obrigatórios em qualquer dia difícil, sem exceções nem cláusulas de escape.</li>
+          <li><strong>§ 2 —</strong> Beijos extras em datas comemorativas — e em dias normais também, porque sim.</li>
+          <li><strong>§ 3 —</strong> Se houver pizza, há paz. É lei universal.</li>
+          <li><strong>§ 4 —</strong> Você tem prioridade máxima na minha vida. Isso não está em negociação.</li>
+          <li><strong>§ 5 —</strong> Maratonar séries junto é atividade essencial e não pode ser feita sem o outro.</li>
+          <li><strong>§ 6 —</strong> "Eu te amo" nunca expira. Renovação automática diária.</li>
+        </ul>
+
+        <div class="sign">
+          <div class="sign-item">
+            <span class="line"></span>
+            <small>Assinatura: Você 💗</small>
+          </div>
+          <div class="sign-item">
+            <span class="line"></span>
+            <small>Assinatura: Eu 💜</small>
+          </div>
+        </div>
+
+        <p class="contract-footer">Firmado em 13 de junho de 2024. Validade: para sempre.</p>
+      </div>
+    </section>
+
+    <!-- ========= FINAL ========= -->
+    <section id="final" class="section final reveal">
+      <div class="final__card">
+        <h2>🌙 Para você</h2>
+        <p class="final__text">
+          Feliz 2 anos, meu amor.<br><br>
+          Se o nosso amor fosse uma teoria científica, seria a única que dá certo em qualquer universo, em qualquer linha do tempo, em qualquer versão da gente.<br><br>
+          Obrigado por cada dia. Por cada abraço. Por cada vez que você me fez sentir em casa só com o seu olhar.<br><br>
+          Aqui vai mais um ano (e mais um, e mais um…) ao seu lado. 💗
+        </p>
+
+        <div class="final-meta">
+          <span class="formula">∑ amor = ∞</span>
+        </div>
+
+        <button class="btn btn--primary btn--big" id="btnConfete" type="button">
+          🎉 Feliz 2 anos!
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal da galeria -->
+  <dialog class="modal" id="modalFoto">
+    <div class="modal__content">
+      <button class="modal__close" id="modalClose" aria-label="Fechar">✕</button>
+      <img id="modalImg" alt="Foto ampliada">
+      <p id="modalCaption"></p>
+    </div>
+  </dialog>
+
+  <!-- Modal surpresa -->
+  <dialog class="modal modal--surpresa" id="modalSurpresa">
+    <div class="modal__content surpresa-content">
+      <button class="modal__close" id="surpresaClose" aria-label="Fechar">✕</button>
+      <div class="surpresa-inner">
+        <p class="surpresa-emoji">💌</p>
+        <h2>Ei, você!</h2>
+        <p class="surpresa-text">
+          Sim, você que está lendo isso. Saiba que existe alguém que pensa em você todos os dias, que sorri só de lembrar do seu nome, e que não consegue imaginar o mundo sem você.<br><br>
+          Feliz 2 anos, meu amor. 💗
+        </p>
+        <button class="btn btn--primary" id="btnSurpresaConfete">Soltar confete! 🎉</button>
+      </div>
+    </div>
+  </dialog>
+
+  <canvas id="confetti"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
