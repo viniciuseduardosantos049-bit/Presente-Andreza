@@ -1,0 +1,67 @@
+@import url("style.css");
+
+:root {
+  --pink: #ff62c7;
+  --pink-2: #241335;
+  --cream: #0f0b1a;
+  --ink: #f7efff;
+  --violet: #8a6bff;
+  --violet-2: #251640;
+}
+
+body {
+  background:
+    radial-gradient(1200px 700px at 15% -10%, rgba(255,98,199,.2), transparent 60%),
+    radial-gradient(1000px 700px at 85% 20%, rgba(138,107,255,.24), transparent 60%),
+    #0d0916;
+  color: var(--ink);
+}
+
+.stars::before,
+.stars::after {
+  opacity: .9;
+}
+
+.topbar,
+.mobile-nav,
+.hero__content,
+.card,
+.final__card,
+.login-card,
+.modal__content {
+  background: rgba(20,12,35,.82);
+  border-color: rgba(255,98,199,.24);
+}
+
+.nav a,
+.mnav-link,
+.subtitle,
+.section__subtitle,
+.final__text,
+.contract-header p,
+.login-subtitle,
+.login-label,
+.hint,
+.gallery-hint {
+  color: rgba(247,239,255,.86);
+}
+
+.stat,
+.clauses li,
+.signature-input,
+.login-input,
+.btn--ghost {
+  background: rgba(33,18,54,.88);
+  color: var(--ink);
+  border-color: rgba(138,107,255,.35);
+}
+
+.model-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: "Pacifico", cursive;
+  color: #ff7fd9;
+  font-size: 28px;
+  background: #0d0916;
+}

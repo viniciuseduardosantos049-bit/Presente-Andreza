@@ -1,0 +1,281 @@
+@import url("style.css");
+
+:root {
+  --pink: #ff7b8f;
+  --pink-2: #ffe7d9;
+  --cream: #fffaf3;
+  --ink: #3b2c2d;
+  --violet: #9f6cff;
+  --violet-2: #f6ebff;
+  --peach: #ffb58a;
+  --shadow-soft: 0 12px 34px rgba(66, 34, 36, 0.10);
+  --shadow-strong: 0 20px 44px rgba(57, 28, 39, 0.18);
+  --ease-premium: cubic-bezier(.22, .7, .2, 1);
+}
+
+body {
+  background:
+    radial-gradient(1200px 700px at -10% -10%, #ffe6d6, transparent 62%),
+    radial-gradient(900px 540px at 105% 12%, #ffdcec, transparent 62%),
+    radial-gradient(760px 440px at 50% 100%, rgba(159,108,255,.14), transparent 65%),
+    var(--cream);
+}
+
+.stars::before,
+.stars::after {
+  opacity: .72;
+}
+
+.topbar {
+  background: rgba(255, 250, 243, .84);
+  border-bottom: 1px solid rgba(255,123,143,.18);
+}
+
+.brand {
+  color: var(--pink);
+}
+
+.nav a {
+  font-weight: 600;
+}
+
+.hero__bg {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255,123,143,.30), transparent 52%),
+    radial-gradient(circle at 78% 72%, rgba(159,108,255,.22), transparent 54%),
+    radial-gradient(circle, rgba(255,123,143,.14) 1.6px, transparent 1.6px);
+  background-size: auto, auto, 22px 22px;
+}
+
+.hero__content,
+.card,
+.final__card,
+.login-card,
+.modal__content {
+  background: rgba(255,255,255,.76);
+  border-color: rgba(255,123,143,.16);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(10px);
+}
+
+.hero__content {
+  border-radius: 30px;
+  box-shadow: var(--shadow-strong);
+  animation: heroLift .8s var(--ease-premium) both;
+}
+
+h1,
+.section h2,
+.surpresa-inner h2,
+.login-title {
+  background: linear-gradient(135deg, var(--pink), var(--peach) 45%, var(--violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle,
+.section__subtitle,
+.final__text {
+  color: rgba(59,44,45,.78);
+}
+
+.btn {
+  transition: transform .16s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, var(--pink), var(--peach), var(--violet));
+  box-shadow: 0 12px 30px rgba(255,123,143,.36);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  filter: saturate(1.08);
+  box-shadow: 0 16px 36px rgba(255,123,143,.45);
+}
+
+.btn--primary::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: -120%;
+  width: 36%;
+  height: 160%;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.32) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  transform: skewX(-20deg);
+}
+
+.btn--primary:hover::after {
+  animation: btnShine .9s var(--ease-premium) both;
+}
+
+.btn--ghost {
+  background: rgba(255,255,255,.72);
+  border-color: rgba(159,108,255,.18);
+}
+
+.stat,
+.clauses li {
+  background: rgba(255,255,255,.62);
+  border-color: rgba(255,123,143,.20);
+}
+
+.timeline-track::before {
+  width: 3px;
+  opacity: .4;
+}
+
+.tl-dot {
+  box-shadow: 0 0 0 4px rgba(255,123,143,.16);
+}
+
+.card {
+  border-radius: 20px;
+  transition: transform .28s var(--ease-premium), box-shadow .3s var(--ease-premium), border-color .25s ease;
+}
+
+.card:hover,
+.final__card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-strong);
+}
+
+.card:hover {
+  border-color: rgba(255,123,143,.35);
+}
+
+.photo__media .media-slot__asset {
+  border-width: 0;
+  box-shadow: 0 14px 26px rgba(37, 16, 29, .14);
+  transition: transform .28s var(--ease-premium), box-shadow .3s var(--ease-premium), filter .3s var(--ease-premium);
+}
+
+.photo__overlay {
+  background: rgba(255,123,143,0);
+}
+
+.photo:hover .photo__overlay {
+  background: linear-gradient(180deg, rgba(255,123,143,.05), rgba(159,108,255,.24));
+}
+
+.photo:hover .media-slot__asset {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 18px 30px rgba(37, 16, 29, .20);
+}
+
+.contract {
+  max-width: 700px;
+}
+
+.formula,
+.chip,
+.tag {
+  border-radius: 10px;
+}
+
+.formula {
+  background: rgba(159,108,255,.12);
+}
+
+.signature-input,
+.login-input {
+  background: rgba(255,255,255,.88);
+  border-color: rgba(159,108,255,.22);
+}
+
+.signature-preview--filled {
+  color: var(--pink);
+}
+
+.login-hint {
+  border-color: rgba(255,123,143,.38);
+  background: rgba(255,123,143,.08);
+}
+
+.modal::backdrop {
+  background: rgba(33, 17, 34, .58);
+}
+
+.final__card {
+  border-radius: 32px;
+}
+
+.reveal {
+  transform: translateY(34px) scale(.985);
+  transition: opacity .7s var(--ease-premium), transform .7s var(--ease-premium);
+}
+
+.reveal.visible {
+  transform: translateY(0) scale(1);
+}
+
+.tl-dot {
+  animation: dotPulse 2.4s ease-in-out infinite;
+}
+
+.stat {
+  transition: transform .22s var(--ease-premium), box-shadow .22s var(--ease-premium);
+}
+
+.stat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(57, 28, 39, .13);
+}
+
+.model-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: "Pacifico", cursive;
+  color: var(--pink);
+  font-size: 28px;
+}
+
+@keyframes heroLift {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes btnShine {
+  from { left: -120%; }
+  to { left: 140%; }
+}
+
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(255,123,143,.14); }
+  50% { box-shadow: 0 0 0 7px rgba(255,123,143,.08); }
+}
+
+@media (max-width: 768px) {
+  .hero__content,
+  .final__card {
+    border-radius: 24px;
+  }
+
+  .card {
+    border-radius: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

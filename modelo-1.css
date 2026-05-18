@@ -1,0 +1,38 @@
+@import url("style.css");
+
+:root {
+  --pink: #ff6cab;
+  --pink-2: #ffe1ef;
+  --cream: #fff8fc;
+  --ink: #2e2431;
+  --violet: #9c6bff;
+  --violet-2: #efe4ff;
+}
+
+body {
+  background:
+    radial-gradient(1200px 700px at 10% -10%, #ffe3f3, transparent 62%),
+    radial-gradient(900px 500px at 100% 10%, rgba(156,107,255,.22), transparent 60%),
+    var(--cream);
+}
+
+.hero__content,
+.card,
+.final__card,
+.login-card {
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,.78);
+}
+
+h1, .section h2, .login-title {
+  text-shadow: 0 8px 24px rgba(255,108,171,.18);
+}
+
+.model-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: "Pacifico", cursive;
+  color: var(--pink);
+  font-size: 28px;
+}

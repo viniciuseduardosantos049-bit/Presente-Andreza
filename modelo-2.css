@@ -1,0 +1,58 @@
+@import url("style.css");
+
+:root {
+  --pink: #ff4fd8;
+  --pink-2: #311034;
+  --cream: #130f1c;
+  --ink: #f3eaff;
+  --violet: #7a5cff;
+  --violet-2: #201533;
+}
+
+body {
+  background:
+    radial-gradient(1000px 500px at 20% 0%, rgba(255,79,216,.18), transparent 60%),
+    radial-gradient(900px 550px at 80% 20%, rgba(122,92,255,.22), transparent 65%),
+    #0f0b18;
+  color: var(--ink);
+}
+
+.topbar,
+.mobile-nav,
+.hero__content,
+.card,
+.final__card,
+.login-card,
+.modal__content {
+  background: rgba(20,14,31,.78);
+  border-color: rgba(255,79,216,.22);
+}
+
+.nav a,
+.mnav-link,
+.subtitle,
+.section__subtitle,
+.contract-header p,
+.final__text,
+.login-subtitle,
+.login-label {
+  color: rgba(243,234,255,.82);
+}
+
+.btn--ghost,
+.signature-input,
+.login-input {
+  background: rgba(33,22,50,.9);
+  color: var(--ink);
+  border-color: rgba(122,92,255,.35);
+}
+
+.model-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: "Pacifico", cursive;
+  color: #ff73df;
+  font-size: 28px;
+  background: #0f0b18;
+}

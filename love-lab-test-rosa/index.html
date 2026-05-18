@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nosso Universo Rosa | Edicao Completa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="croche-bg" aria-hidden="true"></div>
+  <canvas id="bgParticles" class="bg-particles" aria-hidden="true"></canvas>
+  <div class="orb orb-a" aria-hidden="true"></div>
+  <div class="orb orb-b" aria-hidden="true"></div>
+
+  <header class="hero reveal">
+    <p class="pill">site completo | rosa + croche + nerd love</p>
+    <h1>Nosso Apartamento Nerd em Rosa e Croche</h1>
+    <p>
+      Esta versao completa mistura romantismo, referencias de The Big Bang Theory,
+      textura de croche e interacoes para contar nossa historia em camadas.
+    </p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" id="btnQuote">Gerar frase nerd</button>
+      <button class="btn btn-soft" id="btnBazinga">Ativar Bazinga Mode</button>
+      <button class="btn btn-outline" id="btnLetter">Abrir carta croche</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="card stats-card reveal delay-1" aria-labelledby="clockTitle">
+      <h2 id="clockTitle">Relogio do nosso contrato social</h2>
+      <div class="stats">
+        <article>
+          <span>Dias juntos</span>
+          <strong id="daysCount">0</strong>
+        </article>
+        <article>
+          <span>Horas de parceria</span>
+          <strong id="hoursCount">0</strong>
+        </article>
+        <article>
+          <span>Proximo aniversario</span>
+          <strong id="nextCount">0</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="card quote-card reveal delay-2" aria-live="polite" aria-labelledby="quoteTitle">
+      <h2 id="quoteTitle">Quadro de referencias</h2>
+      <p id="quoteText">Clique em "Gerar frase nerd" para receber uma nova frase no nosso estilo.</p>
+      <label class="field-label" for="quoteMode">Tema da frase</label>
+      <select id="quoteMode" class="select">
+        <option value="mixed">Misto</option>
+        <option value="romantic">Romantico</option>
+        <option value="bazinga">Bazinga</option>
+      </select>
+    </section>
+
+    <section class="card idea-card reveal delay-3" aria-labelledby="ideaTitle">
+      <h2 id="ideaTitle">Gerador de date geek</h2>
+      <p id="ideaText">Clique para sortear um novo encontro tematico.</p>
+      <button class="btn btn-primary" id="btnIdea">Sortear date</button>
+    </section>
+
+    <section class="card gallery-card reveal" aria-labelledby="galleryTitle">
+      <h2 id="galleryTitle">Mural croche do casal</h2>
+      <div class="gallery-grid">
+        <article class="gallery-item"><span>📺</span><p>Noite maratona no sofa de Sheldon</p></article>
+        <article class="gallery-item"><span>🧶</span><p>Pontos de croche e abraco no fim do dia</p></article>
+        <article class="gallery-item"><span>☕</span><p>Cafe + teorias malucas que viram risada</p></article>
+        <article class="gallery-item"><span>🚪</span><p>Toc toc toc... Penny! momento oficial</p></article>
+      </div>
+    </section>
+
+    <section class="card contract-card reveal" aria-labelledby="contractTitle">
+      <h2 id="contractTitle">Contrato social do amor</h2>
+      <p>Marque os itens concluidos. O progresso fica salvo neste navegador.</p>
+      <ul class="checklist" id="coupleChecklist">
+        <li><label><input type="checkbox" data-key="0" /> Fazer uma noite de pizza + episodio favorito</label></li>
+        <li><label><input type="checkbox" data-key="1" /> Tirar uma foto no estilo capa de sitcom</label></li>
+        <li><label><input type="checkbox" data-key="2" /> Trocar uma carta escrita a mao</label></li>
+        <li><label><input type="checkbox" data-key="3" /> Repetir a piada interna da semana</label></li>
+        <li><label><input type="checkbox" data-key="4" /> Fazer um mini date em casa com croche e musica</label></li>
+      </ul>
+      <div class="progress-row">
+        <div class="progress-bar" aria-hidden="true"><span id="progressFill"></span></div>
+        <strong id="progressLabel">0% concluido</strong>
+      </div>
+    </section>
+
+    <section class="card timeline reveal" aria-labelledby="timelineTitle">
+      <h2 id="timelineTitle">Linha do tempo de casal cientista</h2>
+      <ul>
+        <li>
+          <span class="bullet"></span>
+          <div>
+            <h3>Primeiro papo</h3>
+            <p>Dois universos colidiram e virou experimento favorito.</p>
+          </div>
+        </li>
+        <li>
+          <span class="bullet"></span>
+          <div>
+            <h3>Primeiro encontro</h3>
+            <p>Risos, nervoso e energia de episodio piloto perfeito.</p>
+          </div>
+        </li>
+        <li>
+          <span class="bullet"></span>
+          <div>
+            <h3>Primeiro "eu te amo"</h3>
+            <p>A frase saiu baixinho, mas mudou todo o enredo.</p>
+          </div>
+        </li>
+        <li>
+          <span class="bullet"></span>
+          <div>
+            <h3>Hoje</h3>
+            <p>A gente segue renovando o acordo de amor todo dia.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card final-card reveal" aria-labelledby="finalTitle">
+      <h2 id="finalTitle">Mensagem final da temporada</h2>
+      <p id="finalMessage">Clique abaixo para revelar a mensagem.</p>
+      <button class="btn btn-soft" id="btnReveal">Revelar final feliz</button>
+    </section>
+  </main>
+
+  <dialog id="letterDialog" class="letter">
+    <form method="dialog" class="letter-content">
+      <button class="close" value="close" aria-label="Fechar">x</button>
+      <p class="tag">carta croche - versao completa</p>
+      <h2>Oi, minha Penny favorita</h2>
+      <p>
+        Se o Sheldon tentasse explicar a gente com matematica, ele iria travar.
+        Nosso amor nao cabe em formula, mas cabe em detalhe, rotina e cuidado.
+      </p>
+      <p>
+        Em cada ponto de croche, em cada risada no sofa e em cada "bazinga" fora de hora,
+        eu encontro meu lugar seguro. Obrigado por ser meu lar em forma de pessoa.
+      </p>
+      <button class="btn btn-primary" value="close">Fechar carta</button>
+    </form>
+  </dialog>
+
+  <div id="bazingaToast" class="bazinga-toast" aria-live="polite" aria-hidden="true">BAZINGA MODE ATIVO: abracos +100%</div>
+
+  <script src="app.js"></script>
+  <script src="particles-bg.js"></script>
+</body>
+</html>

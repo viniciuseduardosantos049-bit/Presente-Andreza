@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Love Lab Test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body>
+  <div class="bg-glow bg-glow--one" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow--two" aria-hidden="true"></div>
+
+  <header class="hero">
+    <p class="hero__chip">FRONTEND TEST BUILD</p>
+    <h1 class="hero__title">Nosso Universo v2</h1>
+    <p class="hero__subtitle">
+      Mesma ideia: celebrar nosso tempo juntos. Visual novo: energia neon, cards vivos,
+      animacao em camadas e interacoes diferentes.
+    </p>
+    <div class="hero__actions">
+      <button id="btnMemory" class="btn btn--solid">Sortear lembranca</button>
+      <button id="btnLetter" class="btn btn--ghost">Abrir carta</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel metric" aria-labelledby="metricTitle">
+      <h2 id="metricTitle">Relogio do nosso caos bonito</h2>
+      <div class="metric__grid">
+        <article class="metric__item">
+          <span>Dias juntos</span>
+          <strong id="daysTogether">0</strong>
+        </article>
+        <article class="metric__item">
+          <span>Horas divididas</span>
+          <strong id="hoursTogether">0</strong>
+        </article>
+        <article class="metric__item">
+          <span>Proximo aniversario</span>
+          <strong id="daysToAnniversary">0</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel quote" aria-live="polite">
+      <h2>Lembranca aleatoria</h2>
+      <p id="quoteBox">Clica em "Sortear lembranca" para aparecer uma nova frase.</p>
+    </section>
+
+    <section class="panel timeline" aria-labelledby="timelineTitle">
+      <h2 id="timelineTitle">Linha do tempo remix</h2>
+      <ul>
+        <li>
+          <span class="dot"></span>
+          <div>
+            <h3>Dia 01</h3>
+            <p>Uma conversa simples que virou ponto de virada.</p>
+          </div>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <div>
+            <h3>Primeiro encontro</h3>
+            <p>Dois nervosos rindo atoa e achando o ritmo.</p>
+          </div>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <div>
+            <h3>Agora</h3>
+            <p>Projeto de vida em andamento, bug nenhum derruba.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <dialog id="letterDialog" class="letter">
+    <form method="dialog" class="letter__content">
+      <button class="letter__close" value="close" aria-label="Fechar carta">x</button>
+      <p class="letter__tag">MODO TESTE</p>
+      <h2>Carta versao laboratorio</h2>
+      <p>
+        Este projeto e so um teste de visual, mas mantem a ideia principal:
+        uma pagina para lembrar que tem amor em cada detalhe pequeno.
+      </p>
+      <p>
+        Se a versao final for para producao, da para plugar musica, galeria,
+        mensagens personalizadas e exportar como app instalavel.
+      </p>
+      <button class="btn btn--solid" value="close">Fechar</button>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

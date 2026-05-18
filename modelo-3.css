@@ -1,0 +1,45 @@
+@import url("style.css");
+
+:root {
+  --pink: #e7549a;
+  --pink-2: #ffe8f3;
+  --cream: #ffffff;
+  --ink: #322c35;
+  --violet: #8d70ff;
+  --violet-2: #f1ebff;
+}
+
+body {
+  background: linear-gradient(180deg, #fff 0%, #fff8fc 45%, #fff 100%);
+}
+
+.topbar {
+  background: rgba(255,255,255,.92);
+}
+
+.hero__content,
+.card,
+.final__card,
+.login-card {
+  background: #fff;
+  border-color: rgba(231,84,154,.18);
+  box-shadow: 0 10px 25px rgba(38,20,44,.08);
+}
+
+.card:hover,
+.final__card:hover {
+  transform: translateY(-2px);
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, #e7549a, #9b82ff);
+}
+
+.model-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: "Pacifico", cursive;
+  color: var(--pink);
+  font-size: 28px;
+}

@@ -9,10 +9,34 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=20260518-2" />
 </head>
 
-<body>
+<body class="app-locked">
+
+  <section class="login-gate" id="loginGate" aria-label="Tela de login">
+    <div class="login-card">
+      <p class="login-tag">💗 Acesso ao nosso universo</p>
+      <h1 class="login-title">Digite a senha para entrar</h1>
+      <p class="login-subtitle">Só quem sabe a palavra mágica pode abrir esse cantinho.</p>
+
+      <form id="loginForm" class="login-form" autocomplete="off">
+        <label for="loginPassword" class="login-label">Senha</label>
+        <input id="loginPassword" class="login-input" name="password" type="password" placeholder="Digite a senha" required />
+        <div class="login-hint" aria-label="Dica">
+          <strong>Dica:</strong> Na porta de quem o Sheldon está batendo?
+        </div>
+        <button class="btn btn--ghost" type="button" id="btnPennyKnock">🚪 Toc toc toc</button>
+        <p id="pennyKnockText" class="penny-knock-text" aria-live="polite"></p>
+        <button class="btn btn--primary" type="submit">Entrar</button>
+        <p id="loginError" class="login-error" role="alert" aria-live="polite"></p>
+      </form>
+
+      <div id="loginSuccess" class="login-success" aria-hidden="true">
+        💗 Acesso liberado, meu amor 💗
+      </div>
+    </div>
+  </section>
 
   <!-- Estrelas de fundo -->
   <div class="stars" aria-hidden="true"></div>
@@ -45,7 +69,8 @@
 
       <div class="hero__content fade-in">
         <p class="tag">✨ 2 anos de namoro ✨</p>
-        <h1>Você é a minha<br>teoria favorita.</h1>
+        <h1>Você é a minha teoria favorita.</h1>
+        <p class="subtitle">Este site foi cientificamente projetado para expressar meu afeto por você, com 73% de humor científico e 27% de fofura de crochê. Bazinga! Na verdade é 100% amor! ❤️</p>
         <div class="hero__buttons">
           <a class="btn btn--primary" href="#timeline">Começar ↓</a>
           <button class="btn btn--ghost" id="btnSurpresa" type="button">💌 Surpresa</button>
@@ -61,6 +86,10 @@
             <span class="stat__label">horas de amor</span>
           </div>
           <div class="stat">
+            <span class="stat__num" id="nextAnniversaryCount">—</span>
+            <span class="stat__label">faltam dias para 3 anos</span>
+          </div>
+          <div class="stat">
             <span class="stat__num">∞</span>
             <span class="stat__label">motivos pra te amar</span>
           </div>
@@ -73,6 +102,22 @@
       <h2>🧶 Nossa linha do tempo</h2>
       <p class="section__subtitle">Momentos que viraram constelação.</p>
 
+      <div class="timeline-pull" id="timelinePull">
+        <button
+          class="timeline-yarn"
+          id="timelineYarn"
+          type="button"
+          aria-label="Arraste a bola de crochê para revelar a linha do tempo"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0">
+          <span class="timeline-yarn__thread" aria-hidden="true"></span>
+          <span class="timeline-yarn__ball" aria-hidden="true">🧶</span>
+        </button>
+        <p class="timeline-pull__hint" id="timelinePullHint">Puxe a bolinha para baixo para revelar a nossa história 💗</p>
+      </div>
+
+      <div class="timeline-reveal" id="timelineReveal">
       <div class="timeline-track">
 
         <div class="tl-item reveal">
@@ -81,9 +126,10 @@
             <span class="tl-date">13/06/2024</span>
             <h3>✨ O começo</h3>
             <p>Tudo começou aqui — o dia mais importante da nossa história. O universo conspirou pra gente.</p>
-            <div class="tl-img-wrap">
-              <img src="assets/tl1.svg" alt="O começo" class="tl-img" onerror="this.parentElement.classList.add('tl-img-wrap--empty')">
-              <label class="tl-img-label">📷 Adicione uma foto</label>
+            <div class="media-slot tl-media tl-media--centered" data-src="assets/ocomeco.mp4" data-alt="O começo" data-empty="📷 Adicione uma foto ou vídeo"></div>
+            <div class="tl-details">
+              <p class="tl-details__text">Aqui você pode escrever um texto maior contando detalhes desse dia: onde estavam, o que sentiram e por que isso mudou tudo.</p>
+              <div class="media-slot" data-src="assets/foto-casal-2.jpeg" data-alt="Detalhes do começo" data-empty="🎬 Adicione foto/vídeo extra deste momento"></div>
             </div>
           </div>
         </div>
@@ -94,9 +140,10 @@
             <span class="tl-date">🍿 Maratona Big Bang</span>
             <h3>Bazinga!</h3>
             <p>Aquele episódio que a gente assistiu junto e ficou citando por dias. "No se puede."</p>
-            <div class="tl-img-wrap">
-              <img src="assets/tl2.svg" alt="Maratona Big Bang" class="tl-img" onerror="this.parentElement.classList.add('tl-img-wrap--empty')">
-              <label class="tl-img-label">📷 Adicione uma foto</label>
+            <div class="media-slot tl-media" data-src="assets/maratona-big-bang.jpeg" data-alt="Maratona Big Bang" data-empty="📷 Adicione uma foto ou vídeo"></div>
+            <div class="tl-details">
+              <p class="tl-details__text">Conte aqui a piada interna completa, a cena favorita e como virou tradição de vocês.</p>
+              <div class="media-slot" data-src="assets/foto-casal-3.jpeg" data-alt="Detalhes da maratona" data-empty="🎬 Adicione foto/vídeo extra deste momento"></div>
             </div>
           </div>
         </div>
@@ -107,9 +154,10 @@
             <span class="tl-date">💗 Nosso favorito</span>
             <h3>Um dia simples, perfeito</h3>
             <p>Um dia que foi especial não pelo que aconteceu, mas por estar com você.</p>
-            <div class="tl-img-wrap">
-              <img src="assets/tl3.svg" alt="Nosso favorito" class="tl-img" onerror="this.parentElement.classList.add('tl-img-wrap--empty')">
-              <label class="tl-img-label">📷 Adicione uma foto</label>
+            <div class="media-slot tl-media" data-src="assets/foto-casal-4.jpeg" data-alt="Nosso favorito" data-empty="📷 Adicione uma foto ou vídeo"></div>
+            <div class="tl-details">
+              <p class="tl-details__text">Descreva aqui tudo que fez esse dia ser inesquecível: a comida, a conversa, o abraço e a sensação de paz.</p>
+              <div class="media-slot" data-src="assets/foto-casal-1.jpeg" data-alt="Detalhes do momento favorito" data-empty="🎬 Adicione foto/vídeo extra deste momento"></div>
             </div>
           </div>
         </div>
@@ -120,13 +168,15 @@
             <span class="tl-date">12/05/2026</span>
             <h3>🎂 2 anos!</h3>
             <p>Dois anos que provam que a gente funciona em qualquer universo. Aqui estamos. 💜</p>
-            <div class="tl-img-wrap">
-              <img src="assets/tl4.svg" alt="2 anos" class="tl-img" onerror="this.parentElement.classList.add('tl-img-wrap--empty')">
-              <label class="tl-img-label">📷 Adicione uma foto</label>
+            <div class="media-slot tl-media tl-media--full" data-src="assets/foto-casal-2.jpeg" data-alt="2 anos" data-empty="📷 Adicione uma foto ou vídeo"></div>
+            <div class="tl-details">
+              <p class="tl-details__text">Use este espaço para registrar a mensagem mais especial do aniversário e o que vocês sonham para os próximos capítulos.</p>
+              <div class="media-slot" data-src="assets/foto-casal-3.jpeg" data-alt="Detalhes de 2 anos" data-empty="🎬 Adicione foto/vídeo extra deste momento"></div>
             </div>
           </div>
         </div>
 
+      </div>
       </div>
     </section>
 
@@ -136,28 +186,28 @@
       <p class="section__subtitle">Provas científicas de que a gente combina.</p>
 
       <div class="grid gallery">
-        <button class="photo" data-caption="Nosso primeiro momento juntos 💗">
-          <img src="assets/foto1.svg" alt="Foto 1" onerror="this.parentElement.classList.add('photo--placeholder')">
+        <button class="photo" type="button" data-caption="Nosso primeiro momento juntos 💗" data-src="" data-alt="Foto 1">
+          <div class="media-slot photo__media" data-src="" data-alt="Foto 1" data-empty="📷 Adicione uma foto ou vídeo"></div>
           <span class="photo__overlay">💗</span>
         </button>
-        <button class="photo" data-caption="Uma aventura que só nós dois entendemos ✨">
-          <img src="assets/foto2.svg" alt="Foto 2" onerror="this.parentElement.classList.add('photo--placeholder')">
+        <button class="photo" type="button" data-caption="Uma aventura que só nós dois entendemos ✨" data-src="" data-alt="Foto 2">
+          <div class="media-slot photo__media" data-src="" data-alt="Foto 2" data-empty="📷 Adicione uma foto ou vídeo"></div>
           <span class="photo__overlay">✨</span>
         </button>
-        <button class="photo" data-caption="Felicidade em formato de nós dois 🌸">
-          <img src="assets/foto3.svg" alt="Foto 3" onerror="this.parentElement.classList.add('photo--placeholder')">
+        <button class="photo" type="button" data-caption="Felicidade em formato de nós dois 🌸" data-src="" data-alt="Foto 3">
+          <div class="media-slot photo__media" data-src="" data-alt="Foto 3" data-empty="📷 Adicione uma foto ou vídeo"></div>
           <span class="photo__overlay">🌸</span>
         </button>
-        <button class="photo" data-caption="Um dia simples que foi tudo 🧶">
-          <img src="assets/foto4.svg" alt="Foto 4" onerror="this.parentElement.classList.add('photo--placeholder')">
+        <button class="photo" type="button" data-caption="Um dia simples que foi tudo 🧶" data-src="" data-alt="Foto 4">
+          <div class="media-slot photo__media" data-src="" data-alt="Foto 4" data-empty="📷 Adicione uma foto ou vídeo"></div>
           <span class="photo__overlay">🧶</span>
         </button>
-        <button class="photo" data-caption="O melhor lugar é do seu lado 💜">
-          <img src="assets/foto5.svg" alt="Foto 5" onerror="this.parentElement.classList.add('photo--placeholder')">
+        <button class="photo" type="button" data-caption="O melhor lugar é do seu lado 💜" data-src="" data-alt="Foto 5">
+          <div class="media-slot photo__media" data-src="" data-alt="Foto 5" data-empty="📷 Adicione uma foto ou vídeo"></div>
           <span class="photo__overlay">💜</span>
         </button>
-        <button class="photo" data-caption="2 anos de sorrisos e eu ainda me apaixono todo dia 🌙">
-          <img src="assets/foto6.svg" alt="Foto 6" onerror="this.parentElement.classList.add('photo--placeholder')">
+        <button class="photo" type="button" data-caption="2 anos de sorrisos e eu ainda me apaixono todo dia 🌙" data-src="" data-alt="Foto 6">
+          <div class="media-slot photo__media" data-src="" data-alt="Foto 6" data-empty="📷 Adicione uma foto ou vídeo"></div>
           <span class="photo__overlay">🌙</span>
         </button>
       </div>
@@ -206,18 +256,46 @@
           <li><strong>§ 4 —</strong> Você tem prioridade máxima na minha vida. Isso não está em negociação.</li>
           <li><strong>§ 5 —</strong> Maratonar séries junto é atividade essencial e não pode ser feita sem o outro.</li>
           <li><strong>§ 6 —</strong> "Eu te amo" nunca expira. Renovação automática diária.</li>
+          <li><strong>§ 7 —</strong> Sempre deixar o resto do seu lanche para mim.</li>
+          <li><strong>§ 10 —</strong> Discussões só podem ser resolvidas com pedra, papel ou tesoura, lagarto, Spock.</li>
+          <li><strong>§ 28 —</strong> Se um dos dois estiver doente, o outro assume o papel de “Dr. Cooper” e cuida com protocolos científicos (e mimos).</li>
+          <li><strong>§ 31 —</strong> Todo “bug” no relacionamento deve ser resolvido com diálogo, paciência e, se necessário, cookies.</li>
+          <li><strong>§ 44 —</strong> O “Dia do Contrato” deve ser celebrado com a execução do “acordo de relacionamento” em voz alta, com testemunhas (pelúcias contam).</li>
+          <li><strong>§ 49 —</strong> O casal deve manter, em local visível, pelo menos um item de decoração nerd (action figure, pôster, ou similar).</li>
         </ul>
 
         <div class="sign">
-          <div class="sign-item">
+          <div class="sign-item sign-item--editable">
             <span class="line"></span>
-            <small>Assinatura: Você 💗</small>
+            <label class="signature-label" for="signatureYou">Sua assinatura:</label>
+            <input
+              class="signature-input"
+              id="signatureYou"
+              type="text"
+              name="signatureYou"
+              placeholder="Digite sua assinatura"
+              aria-label="Digite sua assinatura"
+            />
+            <button class="btn btn--ghost signature-confirm" id="signatureYouConfirm" type="button">Confirmar assinatura</button>
+            <small class="signature-preview" id="signatureYouPreview">Sua assinatura vai aparecer aqui depois de confirmar 💗</small>
           </div>
-          <div class="sign-item">
+          <div class="sign-item sign-item--editable">
             <span class="line"></span>
-            <small>Assinatura: Eu 💜</small>
+            <label class="signature-label" for="signatureHer">Assinatura dela:</label>
+            <input
+              class="signature-input"
+              id="signatureHer"
+              type="text"
+              name="signatureHer"
+              placeholder="Digite a assinatura dela"
+              aria-label="Digite a assinatura dela"
+            />
+            <button class="btn btn--ghost signature-confirm" id="signatureHerConfirm" type="button">Confirmar assinatura</button>
+            <small class="signature-preview" id="signaturePreview">A assinatura dela vai aparecer aqui depois de confirmar 💜</small>
           </div>
         </div>
+
+        <div id="contractStamp" class="contract-stamp" aria-live="polite">✅ Acordo oficializado</div>
 
         <p class="contract-footer">Firmado em 13 de junho de 2024. Validade: para sempre.</p>
       </div>
@@ -231,7 +309,8 @@
           Feliz 2 anos, meu amor.<br><br>
           Se o nosso amor fosse uma teoria científica, seria a única que dá certo em qualquer universo, em qualquer linha do tempo, em qualquer versão da gente.<br><br>
           Obrigado por cada dia. Por cada abraço. Por cada vez que você me fez sentir em casa só com o seu olhar.<br><br>
-          Aqui vai mais um ano (e mais um, e mais um…) ao seu lado. 💗
+          Aqui vai mais um ano (e mais um, e mais um…) ao seu lado. 💗<br><br>
+          <em>Eu te amo… mais só um pouquinho. 💜</em>
         </p>
 
         <div class="final-meta">
@@ -250,8 +329,29 @@
   <dialog class="modal" id="modalFoto">
     <div class="modal__content">
       <button class="modal__close" id="modalClose" aria-label="Fechar">✕</button>
-      <img id="modalImg" alt="Foto ampliada">
+      <div id="modalMedia" class="modal__media"></div>
       <p id="modalCaption"></p>
+    </div>
+  </dialog>
+
+  <!-- Modal Feliz 2 anos -->
+  <dialog class="modal modal--feliz2anos" id="modalFeliz2anos">
+    <div class="modal__content feliz2anos-content">
+      <button class="modal__close" id="feliz2anosClose" aria-label="Fechar">✕</button>
+      <div class="feliz2anos-inner">
+        <p class="feliz2anos-emoji">💗🎉💜</p>
+        <h2>Para você, que fez esses 2 anos serem os mais lindos da minha vida</h2>
+        <div class="feliz2anos-text">
+          <p>Você sabe que eu não sou muito bom com palavras no momento certo… então escrevi aqui, onde dá pra reler.</p>
+          <p>Nesses 2 anos você foi meu lar, minha calma, meu caos favorito e meu motivo de sorrir até nos dias em que eu não queria sorrir pra mais ninguém.</p>
+          <p>Você entrou na minha vida com aquele jeito seu — e sem querer (ou querendo, quem sabe) virou a parte mais importante dela.</p>
+          <p>Cada dia com você é prova de que algumas teorias só funcionam na prática. E a nossa funciona perfeito.</p>
+          <p>Obrigado por cada abraço que sarou, cada risada que salvou, cada silêncio que não precisou de explicação.</p>
+          <p class="feliz2anos-destaque">Feliz 2 anos, meu amor. Aqui vai mais um — e mais um — e mais um… 💗</p>
+          <p class="feliz2anos-choro">Agora é a hora pra você chorar de emoção. 😭💜</p>
+        </div>
+        <button class="btn btn--primary" id="btnFeliz2anosConfete">🎉 Soltar confete!</button>
+      </div>
     </div>
   </dialog>
 
@@ -271,8 +371,25 @@
     </div>
   </dialog>
 
+  <div id="bazingaMode" class="bazinga-mode" aria-hidden="true">
+    <div class="bazinga-mode__content">⚛️ BAZINGA MODE ⚛️</div>
+  </div>
+
   <canvas id="confetti"></canvas>
 
-  <script src="script.js"></script>
+  <!-- Player de fundo (oculto) -->
+  <div id="bgMusicPlayer" style="position:fixed;width:1px;height:1px;opacity:0.001;overflow:hidden;pointer-events:none;left:0;top:0;z-index:-1;" aria-hidden="true">
+    <div id="ytBgPlayer"></div>
+    <audio id="bgFallbackAudio" preload="auto" loop playsinline webkit-playsinline></audio>
+  </div>
+
+  <!-- Botão flutuante de música -->
+  <button id="floatingMusicBtn" class="floating-music-btn" aria-label="Música tocando" title="Pausar/Retomar música">
+    <span class="fmb-icon">🎵</span>
+    <span class="fmb-waves" aria-hidden="true"><span></span><span></span><span></span></span>
+  </button>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="script.js?v=20260518-2"></script>
 </body>
 </html>
