@@ -908,6 +908,737 @@ h1 {
   font-size: 11px;
 }
 
+/* ---- Pinhata Capivara ---- */
+.capy-game {
+  display: grid;
+  place-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.capy-chooser-title {
+  margin: 0;
+  font-weight: 700;
+  color: var(--violet);
+}
+
+.capy-skin-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.capy-skin-option {
+  border: 1px solid rgba(124,77,255,.2);
+  background: rgba(255,255,255,.74);
+  border-radius: 14px;
+  padding: 8px 6px;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+
+.capy-skin-option:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255,95,162,.35);
+  box-shadow: 0 6px 14px rgba(26,18,32,.08);
+}
+
+.capy-skin-option.is-active {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 3px rgba(255,95,162,.12);
+}
+
+.capy-skin-thumb {
+  width: 62px;
+  height: 48px;
+  border-radius: 24px;
+  position: relative;
+  display: block;
+  background: linear-gradient(145deg, #b77a4c, #99613a 62%, #8b5734);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.25);
+}
+
+.capy-skin-thumb::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 10px;
+  left: 50%;
+  top: 21px;
+  transform: translateX(-50%);
+  border-radius: 8px;
+  background: rgba(45,26,17,.7);
+}
+
+.capy-skin-thumb::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 18px;
+  right: -4px;
+  top: 15px;
+  border-radius: 8px;
+  background: #76bf56;
+}
+
+.capy-skin-name {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.capy-skin-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.capy-pinata-btn {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+}
+
+.capy-pinata-btn:disabled {
+  cursor: default;
+}
+
+.capy-hit-fx {
+  position: absolute;
+  right: 4px;
+  top: -4px;
+  font-size: 28px;
+  opacity: 0;
+  transform: scale(.6) rotate(-10deg);
+}
+
+.capy-pinata-btn.is-hit .capy-hit-fx {
+  animation: capySpark .28s ease;
+}
+
+@keyframes capySpark {
+  0% { opacity: 0; transform: scale(.5) rotate(-20deg); }
+  35% { opacity: 1; transform: scale(1.2) rotate(8deg); }
+  100% { opacity: 0; transform: scale(1.45) rotate(18deg); }
+}
+
+.capybara-pinata {
+  --capy-body: linear-gradient(145deg, #b77a4c, #99613a 62%, #8b5734);
+  --capy-ear-color: #8b5734;
+  --capy-snout: #7b4629;
+  --capy-eye-color: #23160f;
+  --capy-nose-color: #3e2417;
+  --capy-pack: linear-gradient(145deg, #9edb79, #5ca642);
+  --capy-strap: #76bf56;
+  width: 190px;
+  height: 146px;
+  border-radius: 92px 92px 84px 84px;
+  background: var(--capy-body);
+  display: block;
+  position: relative;
+  box-shadow: 0 12px 30px rgba(43, 23, 10, .30);
+  transition: transform .16s ease, filter .16s ease, opacity .2s ease;
+}
+
+.capy-style-tag {
+  position: absolute;
+  left: 50%;
+  top: -24px;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,.9);
+  border: 1px solid rgba(124,77,255,.22);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--violet);
+}
+
+.capy-pinata-btn:hover .capybara-pinata {
+  transform: translateY(-2px) rotate(-2deg);
+}
+
+.capy-pinata-btn.is-hit .capybara-pinata {
+  animation: capyHit .24s ease;
+}
+
+@keyframes capyHit {
+  0% { transform: translateX(0) rotate(0deg); }
+  30% { transform: translateX(-6px) rotate(-4deg); }
+  70% { transform: translateX(5px) rotate(3deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+
+.capy-pinata-btn.is-broken .capybara-pinata {
+  filter: saturate(.72) brightness(.96);
+  opacity: .86;
+}
+
+.capy-pinata-btn.is-broken .capybara-pinata::after {
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.35),
+    -22px 2px 0 -18px rgba(255,255,255,.75),
+    8px -7px 0 -18px rgba(255,255,255,.75),
+    27px 9px 0 -18px rgba(255,255,255,.75);
+}
+
+.capybara-pinata::before,
+.capybara-pinata::after {
+  content: "";
+  position: absolute;
+}
+
+.capybara-pinata::before {
+  width: 42px;
+  height: 30px;
+  left: 50%;
+  top: 58px;
+  transform: translateX(-50%);
+  border-radius: 18px;
+  background: var(--capy-snout);
+}
+
+.capybara-pinata::after {
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.28);
+  pointer-events: none;
+}
+
+.capy-ear {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  background: var(--capy-ear-color);
+  border-radius: 50%;
+  top: -10px;
+}
+
+.capy-ear--left { left: 38px; }
+.capy-ear--right { right: 38px; }
+
+.capy-eye {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--capy-eye-color);
+  border-radius: 50%;
+  top: 56px;
+}
+
+.capy-eye--left { left: 62px; }
+.capy-eye--right { right: 62px; }
+
+.capy-nose {
+  position: absolute;
+  width: 16px;
+  height: 9px;
+  background: var(--capy-nose-color);
+  border-radius: 8px;
+  left: 50%;
+  top: 68px;
+  transform: translateX(-50%);
+}
+
+.capy-backpack {
+  position: absolute;
+  width: 40px;
+  height: 52px;
+  right: -10px;
+  top: 44px;
+  border-radius: 14px;
+  background: var(--capy-pack);
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.25);
+  opacity: 0;
+}
+
+.capy-backpack::before {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 12px;
+  width: 30px;
+  height: 20px;
+  border: 4px solid var(--capy-strap);
+  border-right: 0;
+  border-radius: 16px 0 0 16px;
+}
+
+.capy-limb {
+  position: absolute;
+  display: none;
+  background: #8a4e2c;
+}
+
+.capy-limb--paw-left,
+.capy-limb--paw-right {
+  width: 26px;
+  height: 18px;
+  top: 92px;
+  border-radius: 50%;
+}
+
+.capy-limb--paw-left { left: 18px; }
+.capy-limb--paw-right { right: 20px; }
+
+.capy-limb--foot-left,
+.capy-limb--foot-right {
+  width: 30px;
+  height: 16px;
+  bottom: -5px;
+  border-radius: 50%;
+}
+
+.capy-limb--foot-left { left: 34px; }
+.capy-limb--foot-right { right: 32px; }
+
+.capy-accessory {
+  position: absolute;
+  display: none;
+  pointer-events: none;
+}
+
+.capy-crown {
+  left: 50%;
+  top: -18px;
+  width: 34px;
+  height: 18px;
+  transform: translateX(-50%);
+  background: linear-gradient(145deg, #ffd86c, #d3a220);
+  clip-path: polygon(0 100%, 10% 35%, 28% 72%, 46% 30%, 64% 72%, 82% 32%, 100% 100%);
+  border-radius: 0 0 8px 8px;
+}
+
+.capy-hat {
+  left: 50%;
+  top: -20px;
+  width: 70px;
+  height: 24px;
+  transform: translateX(-50%) rotate(-4deg);
+  background: linear-gradient(145deg, #f3bf62, #d38f33);
+  border-radius: 50% 50% 38% 38%;
+}
+
+.capy-hat::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: -12px;
+  width: 34px;
+  height: 16px;
+  border-radius: 50% 50% 30% 30%;
+  background: #e5ab4a;
+}
+
+.capy-headphones {
+  left: 50%;
+  top: 24px;
+  width: 96px;
+  height: 56px;
+  transform: translateX(-50%);
+  border: 6px solid #53d7ff;
+  border-bottom: 0;
+  border-radius: 42px 42px 0 0;
+}
+
+.capy-headphones::before,
+.capy-headphones::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 24px;
+  background: #53d7ff;
+  top: 18px;
+  border-radius: 8px;
+}
+
+.capy-headphones::before { left: -9px; }
+.capy-headphones::after { right: -9px; }
+
+.capy-glasses {
+  left: 50%;
+  top: 46px;
+  width: 84px;
+  height: 14px;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  background: #0e1520;
+}
+
+.capy-glasses::before,
+.capy-glasses::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  width: 24px;
+  height: 24px;
+  border: 4px solid #0e1520;
+  border-radius: 6px;
+}
+
+.capy-glasses::before { left: 8px; }
+.capy-glasses::after { right: 8px; }
+
+.capy-wings {
+  left: 50%;
+  top: 42px;
+  width: 136px;
+  height: 66px;
+  transform: translateX(-50%);
+}
+
+.capy-wings::before,
+.capy-wings::after {
+  content: "";
+  position: absolute;
+  width: 56px;
+  height: 34px;
+  background: linear-gradient(145deg, #fff6ff, #ffd9ef);
+  border-radius: 70% 30% 70% 30%;
+  top: 12px;
+}
+
+.capy-wings::before {
+  left: 0;
+  transform: rotate(-18deg);
+}
+
+.capy-wings::after {
+  right: 0;
+  transform: scaleX(-1) rotate(-18deg);
+}
+
+.capy-board {
+  left: 50%;
+  bottom: -10px;
+  width: 148px;
+  height: 16px;
+  transform: translateX(-50%) rotate(-8deg);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffcf64, #ff8d42 48%, #2cc9ff);
+}
+
+.capy-disco {
+  left: 50%;
+  top: -18px;
+  width: 22px;
+  height: 22px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, #ff9be7 45%, #73d9ff 80%);
+  box-shadow: 0 0 0 2px rgba(255,255,255,.6), 0 0 18px rgba(255,255,255,.8);
+}
+
+.capy-pinata-btn[data-capy-skin="mochileira"] .capybara-pinata,
+.capy-skin-option[data-capy-skin="mochileira"] .capy-skin-thumb {
+  --capy-body: linear-gradient(145deg, #b77a4c, #99613a 62%, #8b5734);
+  --capy-ear-color: #8b5734;
+  --capy-snout: #7b4629;
+  --capy-eye-color: #23160f;
+  --capy-nose-color: #3e2417;
+  --capy-pack: linear-gradient(145deg, #9edb79, #5ca642);
+  --capy-strap: #76bf56;
+}
+
+.capy-pinata-btn[data-capy-skin="mochileira"] .capy-backpack {
+  opacity: 1;
+}
+
+.capy-pinata-btn[data-capy-skin="galaxia"] .capybara-pinata,
+.capy-skin-option[data-capy-skin="galaxia"] .capy-skin-thumb {
+  --capy-body: linear-gradient(145deg, #5f3ff1, #2d1c75 62%, #120c3d);
+  --capy-ear-color: #432cb0;
+  --capy-snout: #1f135c;
+  --capy-eye-color: #fff7b8;
+  --capy-nose-color: #efe3ff;
+  --capy-pack: linear-gradient(145deg, #ff9de1, #a07cff);
+  --capy-strap: #d8c7ff;
+}
+
+.capy-pinata-btn[data-capy-skin="galaxia"] .capybara-pinata {
+  border-radius: 84px 96px 88px 76px;
+}
+
+.capy-pinata-btn[data-capy-skin="galaxia"] .capy-eye {
+  width: 6px;
+  height: 6px;
+  box-shadow: 0 0 8px rgba(255,255,200,.9);
+}
+
+.capy-pinata-btn[data-capy-skin="galaxia"] .capy-disco {
+  display: block;
+}
+
+.capy-pinata-btn[data-capy-skin="croche"] .capybara-pinata,
+.capy-skin-option[data-capy-skin="croche"] .capy-skin-thumb {
+  --capy-body: repeating-linear-gradient(45deg, #bb8a61 0 8px, #ad7b52 8px 16px);
+  --capy-ear-color: #a5734a;
+  --capy-snout: #915f3b;
+  --capy-eye-color: #2e1b12;
+  --capy-nose-color: #4f3222;
+  --capy-pack: linear-gradient(145deg, #ffd4ea, #ff99d0);
+  --capy-strap: #ff7fbd;
+}
+
+.capy-pinata-btn[data-capy-skin="croche"] .capybara-pinata {
+  border-radius: 88px 88px 92px 92px;
+  box-shadow: 0 10px 26px rgba(43,23,10,.24);
+}
+
+.capy-pinata-btn[data-capy-skin="croche"] .capy-ear {
+  border-radius: 42% 58% 50% 50%;
+}
+
+.capy-pinata-btn[data-capy-skin="junina"] .capybara-pinata,
+.capy-skin-option[data-capy-skin="junina"] .capy-skin-thumb {
+  --capy-body: linear-gradient(145deg, #e8a045, #cd6d2a 62%, #9c3b20);
+  --capy-ear-color: #ad5027;
+  --capy-snout: #7f2f18;
+  --capy-eye-color: #2b140c;
+  --capy-nose-color: #2b140c;
+  --capy-pack: linear-gradient(145deg, #ffe96e, #ff9e39);
+  --capy-strap: #ffd54a;
+}
+
+.capy-pinata-btn[data-capy-skin="junina"] .capybara-pinata {
+  border-radius: 86px 74px 96px 80px;
+}
+
+.capy-pinata-btn[data-capy-skin="junina"] .capy-hat {
+  display: block;
+}
+
+.capy-pinata-btn[data-capy-skin="gamer"] .capybara-pinata,
+.capy-skin-option[data-capy-skin="gamer"] .capy-skin-thumb {
+  --capy-body: linear-gradient(145deg, #314a5f, #1d2f41 62%, #0f1e2f);
+  --capy-ear-color: #2a3f52;
+  --capy-snout: #1a2a3a;
+  --capy-eye-color: #59ffe9;
+  --capy-nose-color: #7afcff;
+  --capy-pack: linear-gradient(145deg, #66ff8a, #00c86b);
+  --capy-strap: #4beea1;
+}
+
+.capy-pinata-btn[data-capy-skin="gamer"] .capybara-pinata {
+  border-radius: 80px 80px 72px 72px;
+}
+
+.capy-pinata-btn[data-capy-skin="gamer"] .capy-headphones,
+.capy-pinata-btn[data-capy-skin="gamer"] .capy-glasses {
+  display: block;
+}
+
+.capy-pinata-btn[data-capy-skin="cupido"] .capybara-pinata,
+.capy-skin-option[data-capy-skin="cupido"] .capy-skin-thumb {
+  --capy-body: linear-gradient(145deg, #ff9cbd, #ff6ea4 62%, #ef4f8d);
+  --capy-ear-color: #ff73aa;
+  --capy-snout: #d93f7f;
+  --capy-eye-color: #ffffff;
+  --capy-nose-color: #fff;
+  --capy-pack: linear-gradient(145deg, #fff3b5, #ffd66a);
+  --capy-strap: #ffdf85;
+}
+
+.capy-pinata-btn[data-capy-skin="cupido"] .capybara-pinata {
+  border-radius: 96px 78px 86px 98px;
+}
+
+.capy-pinata-btn[data-capy-skin="cupido"] .capy-wings {
+  display: block;
+}
+
+.capy-pinata-btn[data-capy-skin="surfista"] .capybara-pinata,
+.capy-skin-option[data-capy-skin="surfista"] .capy-skin-thumb {
+  --capy-body: linear-gradient(145deg, #66d8ff, #2aa5da 62%, #0b6ca0);
+  --capy-ear-color: #278cc7;
+  --capy-snout: #0f5f8e;
+  --capy-eye-color: #fff;
+  --capy-nose-color: #d8f5ff;
+  --capy-pack: linear-gradient(145deg, #ffd46e, #ff9f2d);
+  --capy-strap: #ffc054;
+}
+
+.capy-pinata-btn[data-capy-skin="surfista"] .capybara-pinata {
+  border-radius: 74px 92px 82px 98px;
+}
+
+.capy-pinata-btn[data-capy-skin="surfista"] .capy-board {
+  display: block;
+}
+
+.capy-pinata-btn[data-capy-skin="rainha"] .capybara-pinata,
+.capy-skin-option[data-capy-skin="rainha"] .capy-skin-thumb {
+  --capy-body: linear-gradient(145deg, #c5a3ff, #8f6de6 62%, #6940c8);
+  --capy-ear-color: #7e58db;
+  --capy-snout: #5832b2;
+  --capy-eye-color: #fff7d8;
+  --capy-nose-color: #f5ebc6;
+  --capy-pack: linear-gradient(145deg, #ffe58a, #d7ab2f);
+  --capy-strap: #ffd35a;
+}
+
+.capy-pinata-btn[data-capy-skin="rainha"] .capybara-pinata {
+  border-radius: 96px 96px 80px 76px;
+}
+
+.capy-pinata-btn[data-capy-skin="rainha"] .capy-crown {
+  display: block;
+}
+
+.capy-pinata-btn[data-capy-skin="disco"] .capybara-pinata,
+.capy-skin-option[data-capy-skin="disco"] .capy-skin-thumb {
+  --capy-body: linear-gradient(145deg, #ff74d4, #a06bff 50%, #53d3ff);
+  --capy-ear-color: #8c5fff;
+  --capy-snout: #5f42d4;
+  --capy-eye-color: #fff;
+  --capy-nose-color: #fff;
+  --capy-pack: linear-gradient(145deg, #fff, #ffd6ff);
+  --capy-strap: #f4e9ff;
+}
+
+.capy-pinata-btn[data-capy-skin="disco"] .capybara-pinata {
+  border-radius: 78px 98px 88px 86px;
+}
+
+.capy-pinata-btn[data-capy-skin="disco"] .capy-disco,
+.capy-pinata-btn[data-capy-skin="disco"] .capy-glasses {
+  display: block;
+}
+
+.capy-pinata-btn[data-capy-skin="pelucia"] .capybara-pinata,
+.capy-skin-option[data-capy-skin="pelucia"] .capy-skin-thumb {
+  --capy-body: radial-gradient(circle at 35% 22%, #d99964 0%, #bf7a48 52%, #9f633c 100%);
+  --capy-ear-color: #7d3f21;
+  --capy-snout: #6e2f1a;
+  --capy-eye-color: #2d140b;
+  --capy-nose-color: #2d140b;
+  --capy-pack: linear-gradient(145deg, #a6de75, #69af44);
+  --capy-strap: #87c85c;
+}
+
+.capy-pinata-btn[data-capy-skin="pelucia"] .capybara-pinata {
+  width: 212px;
+  height: 188px;
+  border-radius: 104px 98px 102px 110px;
+  box-shadow: 0 14px 32px rgba(55,27,14,.28);
+  filter: saturate(.98) contrast(1.04);
+}
+
+.capy-pinata-btn[data-capy-skin="pelucia"] .capybara-pinata::before {
+  width: 82px;
+  height: 98px;
+  left: 26px;
+  top: 28px;
+  transform: none;
+  border-radius: 44px;
+}
+
+.capy-pinata-btn[data-capy-skin="pelucia"] .capy-backpack {
+  width: 52px;
+  height: 66px;
+  right: -8px;
+  top: 52px;
+  opacity: 1;
+}
+
+.capy-pinata-btn[data-capy-skin="pelucia"] .capy-backpack::before {
+  left: -24px;
+  top: 18px;
+  width: 38px;
+  height: 24px;
+  border-width: 5px;
+}
+
+.capy-pinata-btn[data-capy-skin="pelucia"] .capy-ear {
+  width: 22px;
+  height: 22px;
+  top: 8px;
+}
+
+.capy-pinata-btn[data-capy-skin="pelucia"] .capy-ear--left {
+  left: 58px;
+}
+
+.capy-pinata-btn[data-capy-skin="pelucia"] .capy-ear--right {
+  right: 24px;
+}
+
+.capy-pinata-btn[data-capy-skin="pelucia"] .capy-eye--left {
+  display: none;
+}
+
+.capy-pinata-btn[data-capy-skin="pelucia"] .capy-eye--right {
+  width: 16px;
+  height: 3px;
+  right: 62px;
+  top: 60px;
+  border-radius: 999px;
+}
+
+.capy-pinata-btn[data-capy-skin="pelucia"] .capy-nose {
+  width: 20px;
+  height: 8px;
+  left: 58px;
+  top: 72px;
+  transform: none;
+  border-radius: 999px;
+}
+
+.capy-pinata-btn[data-capy-skin="pelucia"] .capy-limb {
+  display: block;
+}
+
+@media (max-width: 880px) {
+  .capy-skin-grid {
+    grid-template-columns: repeat(3, minmax(110px, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .capy-skin-grid {
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+  }
+}
+
+.capy-status {
+  margin: 0;
+  font-weight: 700;
+  color: var(--violet);
+}
+
+.capy-progress {
+  width: min(420px, 100%);
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(124,77,255,.14);
+  border: 1px solid rgba(124,77,255,.2);
+  overflow: hidden;
+}
+
+.capy-progress span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #ff8cc1, #c77dff);
+  transition: width .2s ease;
+}
+
+.capy-prize {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(42,36,48,.86);
+}
+
+.capy-reset {
+  margin-top: 2px;
+}
+
 /* ---- Motivos ---- */
 .reasons {
   padding-left: 20px;
@@ -1075,6 +1806,42 @@ h1 {
   opacity: 1;
   transform: scale(1);
   animation: stampPop .5s ease;
+}
+
+.contract-delivery {
+  margin-top: 16px;
+  display: grid;
+  gap: 8px;
+  max-width: 520px;
+}
+
+.contract-delivery__row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.contract-download-btn {
+  min-height: 44px;
+  min-width: 160px;
+  padding-inline: 20px;
+}
+
+.contract-delivery__hint {
+  min-height: 18px;
+  font-size: 12px;
+  color: rgba(42,36,48,.72);
+}
+
+.contract-delivery__hint.is-success {
+  color: #2f8654;
+  font-weight: 600;
+}
+
+.contract-delivery__hint.is-warning {
+  color: #b05475;
+  font-weight: 600;
 }
 
 @keyframes stampPop {
@@ -1400,12 +2167,68 @@ h1 {
 
 /* ---- Responsive ---- */
 @media (max-width: 480px) {
+  .section {
+    padding: 64px 14px;
+  }
+
   .hero__content { padding: 24px 18px; }
   h1 { font-size: 32px; }
 
+  .hero__buttons {
+    width: 100%;
+  }
+
+  .hero__buttons .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn {
+    min-height: 44px;
+  }
+
   .sign {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
+
+  .signature-input,
+  .signature-confirm {
+    max-width: 100%;
+  }
+
+  .contract-delivery__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .contract-download-btn {
+    width: 100%;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(2, minmax(130px, 1fr));
+  }
+
+  .photo__media,
+  .photo__media .media-slot__asset {
+    min-height: 160px;
+    height: 160px;
+  }
+
+  .capy-skin-option {
+    min-height: 96px;
+  }
+
+  .capy-pinata-btn {
+    min-height: 190px;
+  }
+
+  .floating-music-btn {
+    bottom: 18px;
+    right: 14px;
+  }
+
   .stats { gap: 10px; }
   .final__card { padding: 32px 18px; }
 }

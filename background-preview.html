@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Opções de Papel de Parede</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 2.5em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Opção 1: Gradiente Rosa-Roxo */
+        .bg-1 {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c744a1 50%, #8b4789 100%);
+        }
+
+        /* Opção 2: Gradiente Cor-de-Rosa Pastel */
+        .bg-2 {
+            background: linear-gradient(135deg, #ffd6e8 0%, #ffb3d9 50%, #ff99d1 100%);
+        }
+
+        /* Opção 3: Gradiente Sunset */
+        .bg-3 {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e72 25%, #ffa751 50%, #ffc93c 100%);
+        }
+
+        /* Opção 4: Gradiente Noturno */
+        .bg-4 {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        /* Opção 5: Gradiente Marinho */
+        .bg-5 {
+            background: linear-gradient(135deg, #0093E9 0%, #80D0C7 100%);
+        }
+
+        /* Opção 6: Gradiente Floresta */
+        .bg-6 {
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c3c 50%, #6ba857 100%);
+        }
+
+        /* Opção 7: Gradiente Flamingo */
+        .bg-7 {
+            background: linear-gradient(135deg, #ff1493 0%, #ff69b4 50%, #ffc0cb 100%);
+        }
+
+        /* Opção 8: Gradiente Minimalista Moderno */
+        .bg-8 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Opção 9: Gradiente Caloroso */
+        .bg-9 {
+            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+        }
+
+        /* Opção 10: Gradiente Místico */
+        .bg-10 {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .info {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .code-box {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+        }
+
+        .current-bg {
+            background: linear-gradient(135deg, #1a0033 0%, #330066 50%, #660099 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 10 Opções de Papel de Parede</h1>
+
+        <div class="current-bg">
+            <strong>🎯 Papel de Parede Atual:</strong><br>
+            Gradiente roxo/magenta (linear-gradient(135deg, #1a0033 0%, #330066 50%, #660099 100%))
+        </div>
+
+        <div class="grid">
+            <!-- Opção 1 -->
+            <div class="card bg-1">
+                <div class="card-label">1️⃣ Rosa-Roxo Vibrante</div>
+            </div>
+
+            <!-- Opção 2 -->
+            <div class="card bg-2">
+                <div class="card-label">2️⃣ Pastel Rosa-Menta</div>
+            </div>
+
+            <!-- Opção 3 -->
+            <div class="card bg-3">
+                <div class="card-label">3️⃣ Sunset Quente</div>
+            </div>
+
+            <!-- Opção 4 -->
+            <div class="card bg-4">
+                <div class="card-label">4️⃣ Noite Escura</div>
+            </div>
+
+            <!-- Opção 5 -->
+            <div class="card bg-5">
+                <div class="card-label">5️⃣ Marinho/Oceano</div>
+            </div>
+
+            <!-- Opção 6 -->
+            <div class="card bg-6">
+                <div class="card-label">6️⃣ Verde Floresta</div>
+            </div>
+
+            <!-- Opção 7 -->
+            <div class="card bg-7">
+                <div class="card-label">7️⃣ Flamingo Rosa</div>
+            </div>
+
+            <!-- Opção 8 -->
+            <div class="card bg-8">
+                <div class="card-label">8️⃣ Roxo Moderno</div>
+            </div>
+
+            <!-- Opção 9 -->
+            <div class="card bg-9">
+                <div class="card-label">9️⃣ Laranja Caloroso</div>
+            </div>
+
+            <!-- Opção 10 -->
+            <div class="card bg-10">
+                <div class="card-label">🔟 Azul-Rosa Místico</div>
+            </div>
+        </div>
+
+        <div class="info">
+            <h2>📋 Códigos dos Gradientes</h2>
+
+            <h3>1️⃣ Rosa-Roxo Vibrante</h3>
+            <div class="code-box">linear-gradient(135deg, #ff6b9d 0%, #c744a1 50%, #8b4789 100%)</div>
+
+            <h3>2️⃣ Pastel Rosa-Menta</h3>
+            <div class="code-box">linear-gradient(135deg, #ffd6e8 0%, #ffb3d9 50%, #ff99d1 100%)</div>
+
+            <h3>3️⃣ Sunset Quente</h3>
+            <div class="code-box">linear-gradient(135deg, #ff6b6b 0%, #ff8e72 25%, #ffa751 50%, #ffc93c 100%)</div>
+
+            <h3>4️⃣ Noite Escura</h3>
+            <div class="code-box">linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)</div>
+
+            <h3>5️⃣ Marinho/Oceano</h3>
+            <div class="code-box">linear-gradient(135deg, #0093E9 0%, #80D0C7 100%)</div>
+
+            <h3>6️⃣ Verde Floresta</h3>
+            <div class="code-box">linear-gradient(135deg, #2d5016 0%, #4a7c3c 50%, #6ba857 100%)</div>
+
+            <h3>7️⃣ Flamingo Rosa</h3>
+            <div class="code-box">linear-gradient(135deg, #ff1493 0%, #ff69b4 50%, #ffc0cb 100%)</div>
+
+            <h3>8️⃣ Roxo Moderno</h3>
+            <div class="code-box">linear-gradient(135deg, #667eea 0%, #764ba2 100%)</div>
+
+            <h3>9️⃣ Laranja Caloroso</h3>
+            <div class="code-box">linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%)</div>
+
+            <h3>🔟 Azul-Rosa Místico</h3>
+            <div class="code-box">linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)</div>
+        </div>
+
+        <div class="footer">
+            <p>💡 Escolha uma opção e me diga o número! Posso também customizar com outras cores.</p>
+        </div>
+    </div>
+</body>
+</html>

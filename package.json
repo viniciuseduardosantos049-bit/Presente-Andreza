@@ -1,0 +1,14 @@
+{
+  "name": "nosso-universo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Projeto romantico com download de copia de contrato em PDF",
+  "main": "frontend-server.js",
+  "scripts": {
+    "start": "node frontend-server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "pdfkit": "^0.15.0"
+  }
+}

@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=20260518-2" />
+  <link rel="stylesheet" href="style.css?v=20260518-9" />
 </head>
 
 <body class="app-locked">
@@ -46,6 +46,7 @@
     <nav class="nav">
       <a href="#timeline">Linha do tempo</a>
       <a href="#galeria">Galeria</a>
+      <a href="#pinhata">Joguinho</a>
       <a href="#motivos">Motivos</a>
       <a href="#acordo">Acordo</a>
       <a href="#final">Final</a>
@@ -56,6 +57,7 @@
   <nav class="mobile-nav" id="mobileNav">
     <a href="#timeline" class="mnav-link">Linha do tempo</a>
     <a href="#galeria" class="mnav-link">Galeria</a>
+    <a href="#pinhata" class="mnav-link">Joguinho</a>
     <a href="#motivos" class="mnav-link">Motivos</a>
     <a href="#acordo" class="mnav-link">Acordo</a>
     <a href="#final" class="mnav-link">Final</a>
@@ -215,6 +217,99 @@
       <p class="hint gallery-hint">💡 Substitua os arquivos em <code>assets/</code> pelas suas fotos.</p>
     </section>
 
+    <!-- ========= PINHATA CAPIVARA ========= -->
+    <section id="pinhata" class="section reveal">
+      <h2>🪅 Pinhata de Capivara</h2>
+      <p class="section__subtitle">Clique na capivara para quebrar a pinhata e liberar um prêmio romântico surpresa.</p>
+
+      <div class="card capy-game">
+        <p class="capy-chooser-title">Escolha o estilo da capivara:</p>
+        <div class="capy-skin-grid" id="capySkinGrid" aria-label="Modelos de capivara">
+          <button class="capy-skin-option" type="button" data-capy-skin="mochileira">
+            <span class="capy-skin-thumb" aria-hidden="true"></span>
+            <span class="capy-skin-icon" aria-hidden="true">🎒</span>
+            <span class="capy-skin-name">Mochileira</span>
+          </button>
+          <button class="capy-skin-option" type="button" data-capy-skin="galaxia">
+            <span class="capy-skin-thumb" aria-hidden="true"></span>
+            <span class="capy-skin-icon" aria-hidden="true">🌌</span>
+            <span class="capy-skin-name">Galáxia</span>
+          </button>
+          <button class="capy-skin-option" type="button" data-capy-skin="croche">
+            <span class="capy-skin-thumb" aria-hidden="true"></span>
+            <span class="capy-skin-icon" aria-hidden="true">🧶</span>
+            <span class="capy-skin-name">Crochê</span>
+          </button>
+          <button class="capy-skin-option" type="button" data-capy-skin="junina">
+            <span class="capy-skin-thumb" aria-hidden="true"></span>
+            <span class="capy-skin-icon" aria-hidden="true">🤠</span>
+            <span class="capy-skin-name">Junina</span>
+          </button>
+          <button class="capy-skin-option" type="button" data-capy-skin="gamer">
+            <span class="capy-skin-thumb" aria-hidden="true"></span>
+            <span class="capy-skin-icon" aria-hidden="true">🎮</span>
+            <span class="capy-skin-name">Gamer</span>
+          </button>
+          <button class="capy-skin-option" type="button" data-capy-skin="cupido">
+            <span class="capy-skin-thumb" aria-hidden="true"></span>
+            <span class="capy-skin-icon" aria-hidden="true">💘</span>
+            <span class="capy-skin-name">Cupido</span>
+          </button>
+          <button class="capy-skin-option" type="button" data-capy-skin="surfista">
+            <span class="capy-skin-thumb" aria-hidden="true"></span>
+            <span class="capy-skin-icon" aria-hidden="true">🏄</span>
+            <span class="capy-skin-name">Surfista</span>
+          </button>
+          <button class="capy-skin-option" type="button" data-capy-skin="rainha">
+            <span class="capy-skin-thumb" aria-hidden="true"></span>
+            <span class="capy-skin-icon" aria-hidden="true">👑</span>
+            <span class="capy-skin-name">Rainha</span>
+          </button>
+          <button class="capy-skin-option" type="button" data-capy-skin="disco">
+            <span class="capy-skin-thumb" aria-hidden="true"></span>
+            <span class="capy-skin-icon" aria-hidden="true">🪩</span>
+            <span class="capy-skin-name">Disco</span>
+          </button>
+          <button class="capy-skin-option is-active" type="button" data-capy-skin="pelucia">
+            <span class="capy-skin-thumb" aria-hidden="true"></span>
+            <span class="capy-skin-icon" aria-hidden="true">🧸</span>
+            <span class="capy-skin-name">Pelúcia</span>
+          </button>
+        </div>
+
+        <button class="capy-pinata-btn" id="capyPinataBtn" data-capy-skin="pelucia" type="button" aria-label="Bater na pinhata de capivara">
+          <span class="capy-hit-fx" aria-hidden="true">✨</span>
+          <span class="capy-style-tag" id="capyStyleTag" aria-live="polite">Pelúcia</span>
+          <span class="capybara-pinata" aria-hidden="true">
+            <span class="capy-ear capy-ear--left"></span>
+            <span class="capy-ear capy-ear--right"></span>
+            <span class="capy-eye capy-eye--left"></span>
+            <span class="capy-eye capy-eye--right"></span>
+            <span class="capy-nose"></span>
+            <span class="capy-limb capy-limb--paw-left"></span>
+            <span class="capy-limb capy-limb--paw-right"></span>
+            <span class="capy-limb capy-limb--foot-left"></span>
+            <span class="capy-limb capy-limb--foot-right"></span>
+            <span class="capy-backpack"></span>
+            <span class="capy-accessory capy-crown"></span>
+            <span class="capy-accessory capy-hat"></span>
+            <span class="capy-accessory capy-headphones"></span>
+            <span class="capy-accessory capy-glasses"></span>
+            <span class="capy-accessory capy-wings"></span>
+            <span class="capy-accessory capy-board"></span>
+            <span class="capy-accessory capy-disco"></span>
+          </span>
+        </button>
+
+        <p class="capy-status" id="capyPinataStatus">Toques: 0/7</p>
+        <div class="capy-progress" role="progressbar" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0" aria-label="Progresso da pinhata">
+          <span id="capyPinataBar"></span>
+        </div>
+        <p class="capy-prize" id="capyPinataPrize" aria-live="polite">Aperte a capivara para liberar a surpresa 💗</p>
+        <button class="btn btn--ghost capy-reset" id="capyPinataReset" type="button" hidden>Jogar de novo</button>
+      </div>
+    </section>
+
     <!-- ========= MOTIVOS ========= -->
     <section id="motivos" class="section reveal">
       <h2>🧠 Motivos por que eu te amo</h2>
@@ -296,6 +391,14 @@
         </div>
 
         <div id="contractStamp" class="contract-stamp" aria-live="polite">✅ Acordo oficializado</div>
+
+        <div class="contract-delivery" id="contractDelivery">
+          <label class="signature-label" for="contractDownloadPdf">Baixar uma cópia do contrato em PDF:</label>
+          <div class="contract-delivery__row">
+            <button class="btn btn--ghost contract-download-btn" id="contractDownloadPdf" type="button">Baixar PDF</button>
+          </div>
+          <small class="contract-delivery__hint" id="contractDeliveryHint">Assim que as duas assinaturas forem confirmadas, o PDF pode ser baixado.</small>
+        </div>
 
         <p class="contract-footer">Firmado em 13 de junho de 2024. Validade: para sempre.</p>
       </div>
@@ -390,6 +493,6 @@
   </button>
 
   <script src="https://www.youtube.com/iframe_api"></script>
-  <script src="script.js?v=20260518-2"></script>
+  <script src="script.js?v=20260518-9"></script>
 </body>
 </html>

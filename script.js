@@ -188,8 +188,6 @@ function tryPlayAudioFallback() {
 
 function tryPlayBgMusic() {
   if (!bgPlayerReady || !bgPlayer) return;
-  stopFallbackAudio();
-  bgPlaybackMode = "yt";
   try {
     bgPlayer.unMute?.();
     bgPlayer.setVolume(28);
@@ -416,6 +414,11 @@ if (loginForm) {
     const typed = (loginPassword?.value || "").trim();
 
     if (typed === ACCESS_PASSWORD) {
+      // Garante início da música no mesmo gesto do submit (menos bloqueios de autoplay).
+      if (!isBgPlayingNow()) {
+        startMusicFromGestureReliable();
+      }
+
       if (loginSuccess) {
         loginSuccess.classList.remove("show");
         void loginSuccess.offsetWidth;
@@ -554,6 +557,8 @@ const signatureHerPendingKey = "nosso-universo-signature-her-pending";
 const signatureYouLockedKey = "nosso-universo-signature-you-locked";
 const signatureHerLockedKey = "nosso-universo-signature-her-locked";
 const contractStamp = document.getElementById("contractStamp");
+const contractDownloadPdfBtn = document.getElementById("contractDownloadPdf");
+const contractDeliveryHint = document.getElementById("contractDeliveryHint");
 
 function updateSignaturePreview(value, previewEl, fallbackText, filledClass = "signature-preview--filled") {
   const cleaned = (value || "").trim();
@@ -581,6 +586,102 @@ function lockSignatureField(inputEl, confirmBtn, confirmText = "Assinado ✅") {
   }
 }
 
+function isContractFullySigned() {
+  const youSigned = localStorage.getItem(signatureYouLockedKey) === "true";
+  const herSigned = localStorage.getItem(signatureHerLockedKey) === "true";
+  return youSigned && herSigned;
+}
+
+function setContractDeliveryHint(message, tone = "info") {
+  if (!contractDeliveryHint) return;
+
+  contractDeliveryHint.textContent = message;
+  contractDeliveryHint.classList.toggle("is-success", tone === "success");
+  contractDeliveryHint.classList.toggle("is-warning", tone === "warning");
+}
+
+function buildContractPdfPayload() {
+  const today = new Date().toLocaleDateString("pt-BR");
+  const youSign = localStorage.getItem(signatureYouStorageKey) || "(nao informado)";
+  const herSign = localStorage.getItem(signatureHerStorageKey) || "(nao informado)";
+  const selectedVariant = (localStorage.getItem("selectedPdfVariant") || "romantico").toLowerCase();
+  const allowedVariants = ["romantico", "minimal", "nerd", "croche", "certificado"];
+  const variant = allowedVariants.includes(selectedVariant) ? selectedVariant : "romantico";
+
+  return {
+    signedAt: today,
+    signYou: youSign,
+    signHer: herSign,
+    variant
+  };
+}
+
+async function downloadContractPdf() {
+  const signed = isContractFullySigned();
+
+  if (!signed) {
+    setContractDeliveryHint("Confirme as duas assinaturas para liberar o PDF.", "warning");
+    return;
+  }
+
+  if (contractDownloadPdfBtn) {
+    contractDownloadPdfBtn.disabled = true;
+    contractDownloadPdfBtn.textContent = "Gerando PDF...";
+  }
+
+  setContractDeliveryHint("Gerando PDF do contrato...", "info");
+
+  try {
+    const payload = buildContractPdfPayload();
+    const response = await fetch("/api/contract-pdf", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errorResult = await response.json().catch(() => ({ message: "Falha ao gerar PDF" }));
+      throw new Error(errorResult.message || "Falha ao gerar PDF");
+    }
+
+    const fileBlob = await response.blob();
+    const fileUrl = URL.createObjectURL(fileBlob);
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = `acordo-namoro-nosso-universo-${payload.signedAt.replace(/\//g, "-")}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(fileUrl);
+
+    setContractDeliveryHint("PDF baixado com sucesso.", "success");
+  } catch (error) {
+    setContractDeliveryHint(`Nao foi possivel gerar o PDF (${error.message || "erro desconhecido"}).`, "warning");
+  } finally {
+    if (contractDownloadPdfBtn) {
+      contractDownloadPdfBtn.disabled = !isContractFullySigned();
+      contractDownloadPdfBtn.textContent = isContractFullySigned() ? "Baixar PDF" : "Assine para liberar";
+    }
+  }
+}
+
+function syncContractPdfState() {
+  const signed = isContractFullySigned();
+
+  if (contractDownloadPdfBtn) {
+    contractDownloadPdfBtn.disabled = !signed;
+    contractDownloadPdfBtn.textContent = signed ? "Baixar PDF" : "Assine para liberar";
+  }
+
+  if (signed) {
+    setContractDeliveryHint("Contrato assinado. O download do PDF esta liberado.", "info");
+  } else {
+    setContractDeliveryHint("Assim que as duas assinaturas forem confirmadas, o PDF pode ser baixado.", "info");
+  }
+}
+
 function updateContractStamp() {
   if (!contractStamp) return;
 
@@ -588,6 +689,7 @@ function updateContractStamp() {
   const herSigned = localStorage.getItem(signatureHerLockedKey) === "true";
 
   contractStamp.classList.toggle("show", youSigned && herSigned);
+  syncContractPdfState();
 }
 
 function wireSignatureField(inputEl, previewEl, confirmBtn, pendingKey, storageKey, lockedKey, fallbackText) {
@@ -651,6 +753,14 @@ wireSignatureField(
 );
 
 updateContractStamp();
+
+if (contractDownloadPdfBtn) {
+  contractDownloadPdfBtn.addEventListener("click", () => {
+    downloadContractPdf();
+  });
+}
+
+syncContractPdfState();
 
 
 // ---- 2.2) Bola de crochê para revelar timeline ----
@@ -1038,6 +1148,134 @@ if (btnConfete) btnConfete.addEventListener("click", () => {
 if (feliz2anosClose) feliz2anosClose.addEventListener("click", () => modalFeliz2anos.close());
 if (modalFeliz2anos) modalFeliz2anos.addEventListener("click", (e) => { if (e.target === modalFeliz2anos) modalFeliz2anos.close(); });
 if (btnFeliz2anosConfete) btnFeliz2anosConfete.addEventListener("click", () => { confettiBlast(300); modalFeliz2anos.close(); });
+
+
+// ---- 6.1) Mini-jogo: Pinhata de Capivara ----
+const capyPinataBtn = document.getElementById("capyPinataBtn");
+const capyPinataStatus = document.getElementById("capyPinataStatus");
+const capyPinataBar = document.getElementById("capyPinataBar");
+const capyPinataPrize = document.getElementById("capyPinataPrize");
+const capyPinataReset = document.getElementById("capyPinataReset");
+const capyPinataProgress = document.querySelector(".capy-progress");
+const capyStyleTag = document.getElementById("capyStyleTag");
+const capySkinOptions = document.querySelectorAll(".capy-skin-option");
+
+const CAPY_HITS_TO_BREAK = 7;
+const capyPrizes = [
+  "Cupom: hoje tem 1 beijo surpresa extra 💋",
+  "Missao desbloqueada: 1 foto nova juntos hoje 📸",
+  "Premio lendario: direito a escolher o filme da noite 🍿",
+  "Bonus romantico: 1 abraco de 60 segundos sem soltar 🤍",
+  "Raro! Vale 1 declaracao caprichada por audio 🎙️",
+  "Buff de casal: passeio aleatorio no fim de semana 🌆",
+  "Combo do amor: 1 sobremesa escolhida por voce hoje 🍰",
+  "Drop epico: 1 vale-massagem de 10 minutos 💆",
+  "Missao secreta: recriar nossa foto favorita hoje 📷",
+  "Power-up carinhoso: 5 elogios sinceros em sequencia ✨"
+];
+
+let capyHits = 0;
+
+function toPrettyCapySkinName(skin) {
+  const names = {
+    mochileira: "Mochileira",
+    galaxia: "Galáxia",
+    croche: "Crochê",
+    junina: "Junina",
+    gamer: "Gamer",
+    cupido: "Cupido",
+    surfista: "Surfista",
+    rainha: "Rainha",
+    disco: "Disco",
+    pelucia: "Pelúcia"
+  };
+  return names[skin] || "Pelúcia";
+}
+
+function applyCapySkin(skin) {
+  if (!capyPinataBtn) return;
+
+  capyPinataBtn.dataset.capySkin = skin;
+
+  if (capyStyleTag) {
+    capyStyleTag.textContent = toPrettyCapySkinName(skin);
+  }
+
+  capySkinOptions.forEach((option) => {
+    option.classList.toggle("is-active", option.dataset.capySkin === skin);
+  });
+}
+
+function updateCapyPinataUI() {
+  if (!capyPinataStatus || !capyPinataBar || !capyPinataProgress) return;
+  const progress = Math.min(capyHits / CAPY_HITS_TO_BREAK, 1);
+  const progressPercent = `${Math.round(progress * 100)}%`;
+
+  capyPinataStatus.textContent = `Toques: ${capyHits}/${CAPY_HITS_TO_BREAK}`;
+  capyPinataBar.style.width = progressPercent;
+  capyPinataProgress.setAttribute("aria-valuenow", `${capyHits}`);
+}
+
+function breakCapyPinata() {
+  if (!capyPinataBtn || !capyPinataPrize) return;
+
+  const prize = capyPrizes[Math.floor(Math.random() * capyPrizes.length)];
+
+  capyPinataBtn.classList.add("is-broken");
+  capyPinataBtn.disabled = true;
+  capyPinataPrize.textContent = `🎉 Quebrou! ${prize}`;
+
+  if (capyPinataReset) {
+    capyPinataReset.hidden = false;
+  }
+
+  confettiBlast(260);
+}
+
+function resetCapyPinata() {
+  capyHits = 0;
+  if (capyPinataBtn) {
+    capyPinataBtn.disabled = false;
+    capyPinataBtn.classList.remove("is-broken", "is-hit");
+  }
+  if (capyPinataPrize) {
+    capyPinataPrize.textContent = "Aperte a capivara para liberar a surpresa 💗";
+  }
+  if (capyPinataReset) {
+    capyPinataReset.hidden = true;
+  }
+  updateCapyPinataUI();
+}
+
+if (capyPinataBtn) {
+  capyPinataBtn.addEventListener("click", () => {
+    if (capyHits >= CAPY_HITS_TO_BREAK) return;
+
+    capyHits += 1;
+    capyPinataBtn.classList.remove("is-hit");
+    void capyPinataBtn.offsetWidth;
+    capyPinataBtn.classList.add("is-hit");
+
+    updateCapyPinataUI();
+
+    if (capyHits >= CAPY_HITS_TO_BREAK) {
+      breakCapyPinata();
+    }
+  });
+}
+
+capySkinOptions.forEach((option) => {
+  option.addEventListener("click", () => {
+    applyCapySkin(option.dataset.capySkin || "pelucia");
+  });
+});
+
+if (capyPinataReset) {
+  capyPinataReset.addEventListener("click", resetCapyPinata);
+}
+
+applyCapySkin(capyPinataBtn?.dataset.capySkin || "pelucia");
+updateCapyPinataUI();
 
 
 // ---- 7) Menu mobile ----

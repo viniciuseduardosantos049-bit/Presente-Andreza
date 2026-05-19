@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5 Exemplos de PDF</title>
+  <style>
+    :root {
+      --bg: #fff6fb;
+      --card: #ffffff;
+      --ink: #2a2430;
+      --muted: #6f5f72;
+      --accent: #7c4dff;
+      --pink: #ff5fa2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Poppins", Arial, sans-serif;
+      background: radial-gradient(900px 480px at 15% 0%, #ffd8ea, transparent 60%), var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 28px 16px 40px;
+    }
+    .wrap { width: min(980px, 100%); margin: 0 auto; }
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      color: var(--accent);
+      font-family: "Pacifico", cursive;
+      font-weight: 400;
+    }
+    .sub { margin: 0 0 24px; color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      border: 1px solid rgba(124, 77, 255, .2);
+      border-radius: 16px;
+      padding: 14px;
+      background: var(--card);
+      box-shadow: 0 10px 24px rgba(48, 25, 65, .1);
+      display: grid;
+      gap: 10px;
+    }
+    .badge {
+      display: inline-flex;
+      width: fit-content;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255,95,162,.14);
+      color: var(--pink);
+      font-weight: 700;
+      font-size: 12px;
+    }
+    h2 { margin: 0; font-size: 18px; }
+    p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    a {
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid rgba(124, 77, 255, .25);
+      color: var(--accent);
+      background: rgba(124, 77, 255, .06);
+    }
+    a.primary {
+      border: none;
+      color: white;
+      background: linear-gradient(135deg, #ff5fa2, #7c4dff);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>5 Exemplos de PDF</h1>
+    <p class="sub">Abra cada modelo para visualizar/baixar um PDF de exemplo com o mesmo conteúdo em estilos diferentes.</p>
+
+    <div class="grid">
+      <article class="card">
+        <span class="badge">Exemplo 1</span>
+        <h2>Romantico</h2>
+        <p>Visual rosa e roxo, próximo ao tema do projeto.</p>
+        <div class="actions">
+          <a class="primary" href="/api/contract-pdf-example?variant=romantico" target="_blank" rel="noopener">Abrir PDF</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="badge">Exemplo 2</span>
+        <h2>Minimalista</h2>
+        <p>Mais limpo, leve e com contraste suave.</p>
+        <div class="actions">
+          <a class="primary" href="/api/contract-pdf-example?variant=minimal" target="_blank" rel="noopener">Abrir PDF</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="badge">Exemplo 3</span>
+        <h2>Nerd Big Bang</h2>
+        <p>Tons lilás/roxo com cara mais sci-fi.</p>
+        <div class="actions">
+          <a class="primary" href="/api/contract-pdf-example?variant=nerd" target="_blank" rel="noopener">Abrir PDF</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="badge">Exemplo 4</span>
+        <h2>Croche Cozy</h2>
+        <p>Tonalidade quentinha e artesanal.</p>
+        <div class="actions">
+          <a class="primary" href="/api/contract-pdf-example?variant=croche" target="_blank" rel="noopener">Abrir PDF</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="badge">Exemplo 5</span>
+        <h2>Certificado</h2>
+        <p>Aparência de documento oficial comemorativo.</p>
+        <div class="actions">
+          <a class="primary" href="/api/contract-pdf-example?variant=certificado" target="_blank" rel="noopener">Abrir PDF</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</body>
+</html>

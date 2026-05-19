@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparador de PDFs - Nosso Universo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .variants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .variant-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .variant-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+
+        .variant-header {
+            padding: 20px;
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.3em;
+        }
+
+        .variant-header.romantico {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06c84 100%);
+        }
+
+        .variant-header.minimal {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+        }
+
+        .variant-header.nerd {
+            background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+        }
+
+        .variant-header.croche {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .variant-header.certificado {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+        }
+
+        .pdf-preview {
+            flex: 1;
+            min-height: 500px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pdf-preview img {
+            width: 100%;
+            height: auto;
+            max-height: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .preview-fallback {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            color: #666;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .variant-footer {
+            padding: 15px 20px;
+            background: #f9f9f9;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        .btn-download {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #5568d3;
+            transform: scale(1.02);
+        }
+
+        .btn-select {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-select:hover {
+            background: #059669;
+            transform: scale(1.02);
+        }
+
+        .btn-select.active {
+            background: #047857;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+        }
+
+        .description {
+            padding: 10px 20px;
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .variants-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .pdf-preview {
+                min-height: 300px;
+            }
+        }
+
+        .selected-banner {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .selected-banner.show {
+            display: flex;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .checkmark {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 Comparador de PDFs</h1>
+            <p class="subtitle">Veja como fica cada estilo e escolha o favorito</p>
+        </header>
+
+        <div class="variants-grid">
+            <!-- Romántico -->
+            <div class="variant-card">
+                <div class="variant-header romantico">💕 Romântico</div>
+                <div class="description">Rosa e violeta - estilo romântico e delicado</div>
+                <div class="pdf-preview">
+                    <img src="/api/contract-pdf-example-preview?variant=romantico" alt="Preview do PDF Romântico" loading="lazy">
+                </div>
+                <div class="variant-footer">
+                    <button class="btn btn-select" onclick="selectVariant('romantico', this)">✓ Escolher</button>
+                    <a href="/api/contract-pdf-example?variant=romantico" class="btn btn-download" download>⬇ Download</a>
+                </div>
+            </div>
+
+            <!-- Minimalista -->
+            <div class="variant-card">
+                <div class="variant-header minimal">✨ Minimalista</div>
+                <div class="description">Limpo e claro - design moderno e elegante</div>
+                <div class="pdf-preview">
+                    <img src="/api/contract-pdf-example-preview?variant=minimal" alt="Preview do PDF Minimalista" loading="lazy">
+                </div>
+                <div class="variant-footer">
+                    <button class="btn btn-select" onclick="selectVariant('minimal', this)">✓ Escolher</button>
+                    <a href="/api/contract-pdf-example?variant=minimal" class="btn btn-download" download>⬇ Download</a>
+                </div>
+            </div>
+
+            <!-- Nerd -->
+            <div class="variant-card">
+                <div class="variant-header nerd">🌌 Nerd Big Bang</div>
+                <div class="description">Lilás futurista - tema geek e divertido</div>
+                <div class="pdf-preview">
+                    <img src="/api/contract-pdf-example-preview?variant=nerd" alt="Preview do PDF Nerd" loading="lazy">
+                </div>
+                <div class="variant-footer">
+                    <button class="btn btn-select" onclick="selectVariant('nerd', this)">✓ Escolher</button>
+                    <a href="/api/contract-pdf-example?variant=nerd" class="btn btn-download" download>⬇ Download</a>
+                </div>
+            </div>
+
+            <!-- Crochê -->
+            <div class="variant-card">
+                <div class="variant-header croche">🧶 Crochê Aconchego</div>
+                <div class="description">Tons quentes - estilo artesanal e acolhedor</div>
+                <div class="pdf-preview">
+                    <img src="/api/contract-pdf-example-preview?variant=croche" alt="Preview do PDF Crochê" loading="lazy">
+                </div>
+                <div class="variant-footer">
+                    <button class="btn btn-select" onclick="selectVariant('croche', this)">✓ Escolher</button>
+                    <a href="/api/contract-pdf-example?variant=croche" class="btn btn-download" download>⬇ Download</a>
+                </div>
+            </div>
+
+            <!-- Certificado -->
+            <div class="variant-card">
+                <div class="variant-header certificado">📜 Certificado Oficial</div>
+                <div class="description">Azul escuro - visual formal e profissional</div>
+                <div class="pdf-preview">
+                    <img src="/api/contract-pdf-example-preview?variant=certificado" alt="Preview do PDF Certificado" loading="lazy">
+                </div>
+                <div class="variant-footer">
+                    <button class="btn btn-select" onclick="selectVariant('certificado', this)">✓ Escolher</button>
+                    <a href="/api/contract-pdf-example?variant=certificado" class="btn btn-download" download>⬇ Download</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner de confirmação -->
+    <div class="selected-banner" id="selectedBanner">
+        <span class="checkmark">✓</span>
+        <span id="bannerText">Estilo selecionado!</span>
+    </div>
+
+    <script>
+        function selectVariant(variant, button) {
+            // Remove active de todos os botões
+            document.querySelectorAll('.btn-select').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Adiciona active ao botão clicado
+            button.classList.add('active');
+
+            // Salva no localStorage
+            localStorage.setItem('selectedPdfVariant', variant);
+
+            // Mostra banner de confirmação
+            const banner = document.getElementById('selectedBanner');
+            const variantNames = {
+                'romantico': '💕 Romântico',
+                'minimal': '✨ Minimalista',
+                'nerd': '🌌 Nerd Big Bang',
+                'croche': '🧶 Crochê Aconchego',
+                'certificado': '📜 Certificado Oficial'
+            };
+
+            document.getElementById('bannerText').textContent = `${variantNames[variant]} selecionado!`;
+            banner.classList.add('show');
+
+            setTimeout(() => {
+                banner.classList.remove('show');
+            }, 3000);
+        }
+
+        // Restaura seleção ao carregar página
+        window.addEventListener('load', () => {
+            const selected = localStorage.getItem('selectedPdfVariant');
+            if (selected) {
+                const button = document.querySelector(`button[onclick="selectVariant('${selected}', this)"]`);
+                if (button) button.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
