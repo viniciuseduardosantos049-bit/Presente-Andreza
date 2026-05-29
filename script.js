@@ -6,371 +6,49 @@
 let bgPlayer = null;
 let bgPlayerReady = false;
 let bgMusicStarted = false;
-let bgFirstGestureCaptured = false;
-let bgAutoplayQueued = false;
-let bgPlaybackMode = "none"; // yt | audio | synth | none
-let bgStartInProgress = false;
-let bgYtFallbackTimer = null;
-let bgYtRetryTimer = null;
-
-const BG_INTERACTION_EVENTS = ["click", "touchstart", "keydown"];
-const BG_FALLBACK_AUDIO_SRC = "assets/bg-music.wav";
-const BG_FORCE_YT_ONLY = false;
-const BG_YT_READY_GRACE_MS = 4500;
-
-const floatingMusicBtn = document.getElementById("floatingMusicBtn");
-const bgFallbackAudio = document.getElementById("bgFallbackAudio");
-
-let bgAudioCtx = null;
-let bgSynthOsc = null;
-let bgSynthGain = null;
-let bgSynthLfo = null;
-let bgSynthLfoGain = null;
-
-if (bgFallbackAudio) {
-  bgFallbackAudio.src = BG_FALLBACK_AUDIO_SRC;
-  bgFallbackAudio.setAttribute("playsinline", "");
-  bgFallbackAudio.setAttribute("webkit-playsinline", "");
-  bgFallbackAudio.volume = 0.5;
-
-  bgFallbackAudio.addEventListener("playing", () => {
-    bgPlaybackMode = "audio";
-    bgMusicStarted = true;
-    bgStartInProgress = false;
-    setMusicButtonPlayingState(true);
-  });
-
-  bgFallbackAudio.addEventListener("pause", () => {
-    if (bgPlaybackMode === "audio") {
-      setMusicButtonPlayingState(false);
-    }
-  });
-
-  bgFallbackAudio.addEventListener("error", () => {
-    bgStartInProgress = false;
-    setMusicButtonPlayingState(false);
-  });
-}
-
-function setMusicButtonPlayingState(isPlaying) {
-  if (!floatingMusicBtn) return;
-  floatingMusicBtn.classList.toggle("is-playing", isPlaying);
-  floatingMusicBtn.setAttribute("aria-label", isPlaying ? "Música tocando" : "Música pausada");
-  floatingMusicBtn.title = isPlaying ? "Pausar música" : "Retomar música";
-}
-
-function isBgPlayingNow() {
-  if (bgPlaybackMode === "yt" && bgPlayerReady && bgPlayer) {
-    return bgPlayer.getPlayerState() === YT.PlayerState.PLAYING;
-  }
-  if (bgPlaybackMode === "audio" && bgFallbackAudio) {
-    return !bgFallbackAudio.paused;
-  }
-  if (bgPlaybackMode === "synth") {
-    return !!bgSynthOsc;
-  }
-  return false;
-}
-
-function stopFallbackAudio() {
-  if (bgFallbackAudio) {
-    bgFallbackAudio.pause();
-    bgFallbackAudio.currentTime = 0;
-  }
-  if (bgSynthOsc) {
-    bgSynthOsc.stop();
-    bgSynthOsc.disconnect();
-    bgSynthOsc = null;
-  }
-  if (bgSynthLfo) {
-    bgSynthLfo.stop();
-    bgSynthLfo.disconnect();
-    bgSynthLfo = null;
-  }
-  if (bgSynthGain) {
-    bgSynthGain.disconnect();
-    bgSynthGain = null;
-  }
-  if (bgSynthLfoGain) {
-    bgSynthLfoGain.disconnect();
-    bgSynthLfoGain = null;
-  }
-}
-
-function pauseAllBgMusic() {
-  if (bgPlayerReady && bgPlayer && bgPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
-    bgPlayer.pauseVideo();
-  }
-  stopFallbackAudio();
-  bgPlaybackMode = "none";
-  setMusicButtonPlayingState(false);
-}
-
-function startSynthFallback() {
-  const AudioCtx = window.AudioContext || window.webkitAudioContext;
-  if (!AudioCtx) return false;
-
-  if (!bgAudioCtx) {
-    bgAudioCtx = new AudioCtx();
-  }
-
-  bgAudioCtx.resume();
-
-  stopFallbackAudio();
-
-  bgSynthOsc = bgAudioCtx.createOscillator();
-  bgSynthGain = bgAudioCtx.createGain();
-  bgSynthLfo = bgAudioCtx.createOscillator();
-  bgSynthLfoGain = bgAudioCtx.createGain();
-
-  bgSynthOsc.type = "sine";
-  bgSynthOsc.frequency.value = 220;
-  bgSynthGain.gain.value = 0.018;
-
-  bgSynthLfo.type = "sine";
-  bgSynthLfo.frequency.value = 0.35;
-  bgSynthLfoGain.gain.value = 16;
-
-  bgSynthLfo.connect(bgSynthLfoGain);
-  bgSynthLfoGain.connect(bgSynthOsc.frequency);
-
-  bgSynthOsc.connect(bgSynthGain);
-  bgSynthGain.connect(bgAudioCtx.destination);
-
-  bgSynthOsc.start();
-  bgSynthLfo.start();
-
-  bgPlaybackMode = "synth";
-  bgMusicStarted = true;
-  setMusicButtonPlayingState(true);
-  return true;
-}
-
-function tryPlayAudioFallback() {
-  if (!bgFallbackAudio) return false;
-
-  if (bgPlaybackMode === "audio" && !bgFallbackAudio.paused) {
-    return true;
-  }
-
-  bgStartInProgress = true;
-
-  stopFallbackAudio();
-  try {
-    bgFallbackAudio.currentTime = 0;
-  } catch {
-    // Alguns navegadores móveis bloqueiam seek inicial antes do primeiro play.
-  }
-
-  const maybePromise = bgFallbackAudio.play();
-  if (!maybePromise || typeof maybePromise.then !== "function") {
-    bgPlaybackMode = "audio";
-    bgMusicStarted = true;
-    bgStartInProgress = false;
-    setMusicButtonPlayingState(true);
-    removeFirstInteractionListeners();
-    return true;
-  }
-
-  maybePromise.then(() => {
-    bgPlaybackMode = "audio";
-    bgMusicStarted = true;
-    bgStartInProgress = false;
-    setMusicButtonPlayingState(true);
-    removeFirstInteractionListeners();
-  }).catch(() => {
-    bgStartInProgress = false;
-    setMusicButtonPlayingState(false);
-  });
-
-  return true;
-}
-
-function tryPlayBgMusic() {
-  if (!bgPlayerReady || !bgPlayer) return;
-  try {
-    bgPlayer.unMute?.();
-    bgPlayer.setVolume(28);
-  } catch {
-    // Se o player ainda não aceitar comandos, tentamos só o play.
-  }
-  bgPlayer.playVideo();
-}
-
-function tryPlayYtWithRetries(attempt = 0) {
-  if (!bgPlayerReady || !bgPlayer) return;
-
-  tryPlayBgMusic();
-
-  if (bgYtRetryTimer) {
-    clearTimeout(bgYtRetryTimer);
-  }
-
-  if (attempt >= 4) return;
-
-  bgYtRetryTimer = setTimeout(() => {
-    if (!isBgPlayingNow()) {
-      tryPlayYtWithRetries(attempt + 1);
-    }
-  }, 900);
-}
-
-function queueYtFallbackCheck() {
-  if (bgYtFallbackTimer) {
-    clearTimeout(bgYtFallbackTimer);
-  }
-
-  bgYtFallbackTimer = setTimeout(() => {
-    if (!isBgPlayingNow() && !BG_FORCE_YT_ONLY) {
-      tryPlayAudioFallback();
-    }
-  }, 4200);
-}
-
-function startMusicFromGestureReliable() {
-  bgFirstGestureCaptured = true;
-  bgAutoplayQueued = true;
-
-  // Prioriza a música original do YouTube enviada pelo usuário.
-  if (bgPlayerReady) {
-    tryPlayYtWithRetries(0);
-
-    // Se o player demorar para engatar, já inicia fallback no mesmo gesto
-    // para não perder permissão de autoplay em navegadores restritivos.
-    if (!BG_FORCE_YT_ONLY && !isBgPlayingNow()) {
-      tryPlayAudioFallback();
-    }
-
-    queueYtFallbackCheck();
-    return;
-  }
-
-  if (!BG_FORCE_YT_ONLY) {
-    // Tenta tocar fallback imediatamente ainda dentro do gesto do usuário.
-    tryPlayAudioFallback();
-
-    // Se a API do YouTube não inicializar na máquina do usuário, toca fallback local.
-    setTimeout(() => {
-      if (!bgPlayerReady && !isBgPlayingNow()) {
-        tryPlayAudioFallback();
-      }
-    }, BG_YT_READY_GRACE_MS);
-
-    // Aguarda YouTube inicializar; só cai no fallback se realmente falhar.
-    queueYtFallbackCheck();
-  }
-}
-
-function removeFirstInteractionListeners() {
-  BG_INTERACTION_EVENTS.forEach((ev) => document.removeEventListener(ev, onFirstInteraction));
-}
-
-function onBgPlayerStateChange(event) {
-  if (!window.YT || typeof event?.data !== "number") return;
-  if (event.data === YT.PlayerState.PLAYING) {
-    if (bgYtRetryTimer) {
-      clearTimeout(bgYtRetryTimer);
-      bgYtRetryTimer = null;
-    }
-    if (bgYtFallbackTimer) {
-      clearTimeout(bgYtFallbackTimer);
-      bgYtFallbackTimer = null;
-    }
-    stopFallbackAudio();
-    bgPlaybackMode = "yt";
-    bgMusicStarted = true;
-    setMusicButtonPlayingState(true);
-    bgAutoplayQueued = false;
-    removeFirstInteractionListeners();
-  }
-  if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-    if (bgPlaybackMode === "yt") {
-      setMusicButtonPlayingState(false);
-    }
-  }
-}
 
 window.onYouTubeIframeAPIReady = function () {
   bgPlayer = new YT.Player("ytBgPlayer", {
     videoId: "Oa_RSwwpPaA",
-    playerVars: {
-      autoplay: 0,
-      controls: 0,
-      loop: 1,
-      playlist: "Oa_RSwwpPaA",
-      rel: 0,
-      modestbranding: 1,
-      playsinline: 1,
-      enablejsapi: 1,
-      origin: window.location.origin,
-      iv_load_policy: 3,
-      fs: 0,
-      disablekb: 1
-    },
+    playerVars: { autoplay: 0, controls: 0, loop: 1, playlist: "Oa_RSwwpPaA", rel: 0, modestbranding: 1 },
     events: {
       onReady: () => {
         bgPlayerReady = true;
         bgPlayer.setVolume(20);
-        if (bgAutoplayQueued || bgFirstGestureCaptured) {
-          tryPlayYtWithRetries(0);
-          queueYtFallbackCheck();
-        }
-      },
-      onStateChange: onBgPlayerStateChange,
-      onError: () => {
-        if (!isBgPlayingNow() && !BG_FORCE_YT_ONLY) {
-          tryPlayAudioFallback();
-        } else {
-          setMusicButtonPlayingState(false);
-        }
       }
     }
   });
 };
 
-setTimeout(() => {
-  // Recuperação quando a API do YouTube não carrega por bloqueio local/rede.
-  if (bgAutoplayQueued && !bgPlayerReady && !isBgPlayingNow() && !BG_FORCE_YT_ONLY) {
-    tryPlayAudioFallback();
-  }
-}, BG_YT_READY_GRACE_MS + 1200);
+const floatingMusicBtn = document.getElementById("floatingMusicBtn");
 
-function onFirstInteraction(event) {
-  if (event?.target && floatingMusicBtn && floatingMusicBtn.contains(event.target)) {
-    return;
+function startBgMusic() {
+  if (!bgMusicStarted && bgPlayerReady) {
+    bgPlayer.playVideo();
+    bgMusicStarted = true;
+    if (floatingMusicBtn) floatingMusicBtn.classList.add("is-playing");
   }
-
-  if (bgMusicStarted || bgStartInProgress) {
-    removeFirstInteractionListeners();
-    return;
-  }
-
-  if (bgFirstGestureCaptured) {
-    return;
-  }
-
-  startMusicFromGestureReliable();
 }
 
-BG_INTERACTION_EVENTS.forEach((ev) => {
-  document.addEventListener(ev, onFirstInteraction, { passive: true, once: true });
-});
+function onFirstInteraction() {
+  startBgMusic();
+  ["click", "touchstart", "keydown"].forEach(ev => document.removeEventListener(ev, onFirstInteraction));
+}
+["click", "touchstart", "keydown"].forEach(ev => document.addEventListener(ev, onFirstInteraction, { once: true }));
 
 if (floatingMusicBtn) {
-  floatingMusicBtn.addEventListener("touchstart", (e) => {
-    e.stopPropagation();
-  }, { passive: true });
-
   floatingMusicBtn.addEventListener("click", (e) => {
     e.stopPropagation();
-    bgFirstGestureCaptured = true;
-
-    if (isBgPlayingNow()) {
-      pauseAllBgMusic();
-      return;
+    if (!bgPlayerReady) return;
+    const state = bgPlayer.getPlayerState();
+    if (state === YT.PlayerState.PLAYING) {
+      bgPlayer.pauseVideo();
+      floatingMusicBtn.classList.remove("is-playing");
+    } else {
+      bgPlayer.playVideo();
+      bgMusicStarted = true;
+      floatingMusicBtn.classList.add("is-playing");
     }
-
-    startMusicFromGestureReliable();
   });
 }
 
@@ -414,11 +92,6 @@ if (loginForm) {
     const typed = (loginPassword?.value || "").trim();
 
     if (typed === ACCESS_PASSWORD) {
-      // Garante início da música no mesmo gesto do submit (menos bloqueios de autoplay).
-      if (!isBgPlayingNow()) {
-        startMusicFromGestureReliable();
-      }
-
       if (loginSuccess) {
         loginSuccess.classList.remove("show");
         void loginSuccess.offsetWidth;
@@ -557,8 +230,6 @@ const signatureHerPendingKey = "nosso-universo-signature-her-pending";
 const signatureYouLockedKey = "nosso-universo-signature-you-locked";
 const signatureHerLockedKey = "nosso-universo-signature-her-locked";
 const contractStamp = document.getElementById("contractStamp");
-const contractDownloadPdfBtn = document.getElementById("contractDownloadPdf");
-const contractDeliveryHint = document.getElementById("contractDeliveryHint");
 
 function updateSignaturePreview(value, previewEl, fallbackText, filledClass = "signature-preview--filled") {
   const cleaned = (value || "").trim();
@@ -586,102 +257,6 @@ function lockSignatureField(inputEl, confirmBtn, confirmText = "Assinado ✅") {
   }
 }
 
-function isContractFullySigned() {
-  const youSigned = localStorage.getItem(signatureYouLockedKey) === "true";
-  const herSigned = localStorage.getItem(signatureHerLockedKey) === "true";
-  return youSigned && herSigned;
-}
-
-function setContractDeliveryHint(message, tone = "info") {
-  if (!contractDeliveryHint) return;
-
-  contractDeliveryHint.textContent = message;
-  contractDeliveryHint.classList.toggle("is-success", tone === "success");
-  contractDeliveryHint.classList.toggle("is-warning", tone === "warning");
-}
-
-function buildContractPdfPayload() {
-  const today = new Date().toLocaleDateString("pt-BR");
-  const youSign = localStorage.getItem(signatureYouStorageKey) || "(nao informado)";
-  const herSign = localStorage.getItem(signatureHerStorageKey) || "(nao informado)";
-  const selectedVariant = (localStorage.getItem("selectedPdfVariant") || "romantico").toLowerCase();
-  const allowedVariants = ["romantico", "minimal", "nerd", "croche", "certificado"];
-  const variant = allowedVariants.includes(selectedVariant) ? selectedVariant : "romantico";
-
-  return {
-    signedAt: today,
-    signYou: youSign,
-    signHer: herSign,
-    variant
-  };
-}
-
-async function downloadContractPdf() {
-  const signed = isContractFullySigned();
-
-  if (!signed) {
-    setContractDeliveryHint("Confirme as duas assinaturas para liberar o PDF.", "warning");
-    return;
-  }
-
-  if (contractDownloadPdfBtn) {
-    contractDownloadPdfBtn.disabled = true;
-    contractDownloadPdfBtn.textContent = "Gerando PDF...";
-  }
-
-  setContractDeliveryHint("Gerando PDF do contrato...", "info");
-
-  try {
-    const payload = buildContractPdfPayload();
-    const response = await fetch("/api/contract-pdf", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
-
-    if (!response.ok) {
-      const errorResult = await response.json().catch(() => ({ message: "Falha ao gerar PDF" }));
-      throw new Error(errorResult.message || "Falha ao gerar PDF");
-    }
-
-    const fileBlob = await response.blob();
-    const fileUrl = URL.createObjectURL(fileBlob);
-    const link = document.createElement("a");
-    link.href = fileUrl;
-    link.download = `acordo-namoro-nosso-universo-${payload.signedAt.replace(/\//g, "-")}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(fileUrl);
-
-    setContractDeliveryHint("PDF baixado com sucesso.", "success");
-  } catch (error) {
-    setContractDeliveryHint(`Nao foi possivel gerar o PDF (${error.message || "erro desconhecido"}).`, "warning");
-  } finally {
-    if (contractDownloadPdfBtn) {
-      contractDownloadPdfBtn.disabled = !isContractFullySigned();
-      contractDownloadPdfBtn.textContent = isContractFullySigned() ? "Baixar PDF" : "Assine para liberar";
-    }
-  }
-}
-
-function syncContractPdfState() {
-  const signed = isContractFullySigned();
-
-  if (contractDownloadPdfBtn) {
-    contractDownloadPdfBtn.disabled = !signed;
-    contractDownloadPdfBtn.textContent = signed ? "Baixar PDF" : "Assine para liberar";
-  }
-
-  if (signed) {
-    setContractDeliveryHint("Contrato assinado. O download do PDF esta liberado.", "info");
-  } else {
-    setContractDeliveryHint("Assim que as duas assinaturas forem confirmadas, o PDF pode ser baixado.", "info");
-  }
-}
-
 function updateContractStamp() {
   if (!contractStamp) return;
 
@@ -689,7 +264,6 @@ function updateContractStamp() {
   const herSigned = localStorage.getItem(signatureHerLockedKey) === "true";
 
   contractStamp.classList.toggle("show", youSigned && herSigned);
-  syncContractPdfState();
 }
 
 function wireSignatureField(inputEl, previewEl, confirmBtn, pendingKey, storageKey, lockedKey, fallbackText) {
@@ -753,14 +327,6 @@ wireSignatureField(
 );
 
 updateContractStamp();
-
-if (contractDownloadPdfBtn) {
-  contractDownloadPdfBtn.addEventListener("click", () => {
-    downloadContractPdf();
-  });
-}
-
-syncContractPdfState();
 
 
 // ---- 2.2) Bola de crochê para revelar timeline ----
@@ -892,59 +458,6 @@ function clearMediaFallback(container) {
   container.innerHTML = "";
 }
 
-function applyVideoPolicy(video) {
-  if (!video) return;
-
-  video.controls = false;
-  video.autoplay = true;
-  video.muted = true;
-  video.defaultMuted = true;
-  video.volume = 0;
-  video.loop = true;
-  video.playsInline = true;
-  video.preload = "metadata";
-  video.disablePictureInPicture = true;
-  video.tabIndex = -1;
-  video.setAttribute("playsinline", "");
-  video.setAttribute("webkit-playsinline", "");
-  video.setAttribute("controlsList", "nodownload noplaybackrate nofullscreen noremoteplayback");
-
-  const keepPlaying = () => {
-    if (video.paused) {
-      video.play().catch(() => {});
-    }
-  };
-
-  video.addEventListener("pause", keepPlaying);
-  video.addEventListener("volumechange", () => {
-    if (!video.muted || video.volume !== 0) {
-      video.muted = true;
-      video.volume = 0;
-    }
-  });
-  video.addEventListener("loadeddata", keepPlaying, { once: true });
-}
-
-function enforceGlobalVideoPolicy(root = document) {
-  root.querySelectorAll("video").forEach((video) => applyVideoPolicy(video));
-}
-
-const videoPolicyObserver = new MutationObserver((mutations) => {
-  mutations.forEach((mutation) => {
-    mutation.addedNodes.forEach((node) => {
-      if (!(node instanceof Element)) return;
-      if (node.tagName === "VIDEO") {
-        applyVideoPolicy(node);
-      } else {
-        enforceGlobalVideoPolicy(node);
-      }
-    });
-  });
-});
-
-enforceGlobalVideoPolicy(document);
-videoPolicyObserver.observe(document.body, { childList: true, subtree: true });
-
 function renderMedia(container) {
   if (!container) return;
 
@@ -964,8 +477,12 @@ function renderMedia(container) {
     const video = document.createElement("video");
     video.src = src;
     video.alt = alt;
+    video.controls = true;
+    video.preload = "metadata";
+    video.playsInline = true;
+    video.muted = true;
+    video.loop = true;
     video.className = "media-slot__asset media-slot__video";
-    applyVideoPolicy(video);
     video.addEventListener("error", () => {
       container.classList.add("media-slot--empty");
       container.innerHTML = `<span class="media-slot__empty">${emptyText}</span>`;
@@ -1008,7 +525,12 @@ document.querySelectorAll(".photo").forEach(btn => {
     media.className = isVideoFile(src) ? "modal__asset modal__video" : "modal__asset modal__image";
 
     if (isVideoFile(src)) {
-      applyVideoPolicy(media);
+      media.controls = true;
+      media.autoplay = true;
+      media.muted = true;
+      media.loop = true;
+      media.playsInline = true;
+      media.preload = "metadata";
     }
 
     media.addEventListener("error", () => {
@@ -1148,134 +670,6 @@ if (btnConfete) btnConfete.addEventListener("click", () => {
 if (feliz2anosClose) feliz2anosClose.addEventListener("click", () => modalFeliz2anos.close());
 if (modalFeliz2anos) modalFeliz2anos.addEventListener("click", (e) => { if (e.target === modalFeliz2anos) modalFeliz2anos.close(); });
 if (btnFeliz2anosConfete) btnFeliz2anosConfete.addEventListener("click", () => { confettiBlast(300); modalFeliz2anos.close(); });
-
-
-// ---- 6.1) Mini-jogo: Pinhata de Capivara ----
-const capyPinataBtn = document.getElementById("capyPinataBtn");
-const capyPinataStatus = document.getElementById("capyPinataStatus");
-const capyPinataBar = document.getElementById("capyPinataBar");
-const capyPinataPrize = document.getElementById("capyPinataPrize");
-const capyPinataReset = document.getElementById("capyPinataReset");
-const capyPinataProgress = document.querySelector(".capy-progress");
-const capyStyleTag = document.getElementById("capyStyleTag");
-const capySkinOptions = document.querySelectorAll(".capy-skin-option");
-
-const CAPY_HITS_TO_BREAK = 7;
-const capyPrizes = [
-  "Cupom: hoje tem 1 beijo surpresa extra 💋",
-  "Missao desbloqueada: 1 foto nova juntos hoje 📸",
-  "Premio lendario: direito a escolher o filme da noite 🍿",
-  "Bonus romantico: 1 abraco de 60 segundos sem soltar 🤍",
-  "Raro! Vale 1 declaracao caprichada por audio 🎙️",
-  "Buff de casal: passeio aleatorio no fim de semana 🌆",
-  "Combo do amor: 1 sobremesa escolhida por voce hoje 🍰",
-  "Drop epico: 1 vale-massagem de 10 minutos 💆",
-  "Missao secreta: recriar nossa foto favorita hoje 📷",
-  "Power-up carinhoso: 5 elogios sinceros em sequencia ✨"
-];
-
-let capyHits = 0;
-
-function toPrettyCapySkinName(skin) {
-  const names = {
-    mochileira: "Mochileira",
-    galaxia: "Galáxia",
-    croche: "Crochê",
-    junina: "Junina",
-    gamer: "Gamer",
-    cupido: "Cupido",
-    surfista: "Surfista",
-    rainha: "Rainha",
-    disco: "Disco",
-    pelucia: "Pelúcia"
-  };
-  return names[skin] || "Pelúcia";
-}
-
-function applyCapySkin(skin) {
-  if (!capyPinataBtn) return;
-
-  capyPinataBtn.dataset.capySkin = skin;
-
-  if (capyStyleTag) {
-    capyStyleTag.textContent = toPrettyCapySkinName(skin);
-  }
-
-  capySkinOptions.forEach((option) => {
-    option.classList.toggle("is-active", option.dataset.capySkin === skin);
-  });
-}
-
-function updateCapyPinataUI() {
-  if (!capyPinataStatus || !capyPinataBar || !capyPinataProgress) return;
-  const progress = Math.min(capyHits / CAPY_HITS_TO_BREAK, 1);
-  const progressPercent = `${Math.round(progress * 100)}%`;
-
-  capyPinataStatus.textContent = `Toques: ${capyHits}/${CAPY_HITS_TO_BREAK}`;
-  capyPinataBar.style.width = progressPercent;
-  capyPinataProgress.setAttribute("aria-valuenow", `${capyHits}`);
-}
-
-function breakCapyPinata() {
-  if (!capyPinataBtn || !capyPinataPrize) return;
-
-  const prize = capyPrizes[Math.floor(Math.random() * capyPrizes.length)];
-
-  capyPinataBtn.classList.add("is-broken");
-  capyPinataBtn.disabled = true;
-  capyPinataPrize.textContent = `🎉 Quebrou! ${prize}`;
-
-  if (capyPinataReset) {
-    capyPinataReset.hidden = false;
-  }
-
-  confettiBlast(260);
-}
-
-function resetCapyPinata() {
-  capyHits = 0;
-  if (capyPinataBtn) {
-    capyPinataBtn.disabled = false;
-    capyPinataBtn.classList.remove("is-broken", "is-hit");
-  }
-  if (capyPinataPrize) {
-    capyPinataPrize.textContent = "Aperte a capivara para liberar a surpresa 💗";
-  }
-  if (capyPinataReset) {
-    capyPinataReset.hidden = true;
-  }
-  updateCapyPinataUI();
-}
-
-if (capyPinataBtn) {
-  capyPinataBtn.addEventListener("click", () => {
-    if (capyHits >= CAPY_HITS_TO_BREAK) return;
-
-    capyHits += 1;
-    capyPinataBtn.classList.remove("is-hit");
-    void capyPinataBtn.offsetWidth;
-    capyPinataBtn.classList.add("is-hit");
-
-    updateCapyPinataUI();
-
-    if (capyHits >= CAPY_HITS_TO_BREAK) {
-      breakCapyPinata();
-    }
-  });
-}
-
-capySkinOptions.forEach((option) => {
-  option.addEventListener("click", () => {
-    applyCapySkin(option.dataset.capySkin || "pelucia");
-  });
-});
-
-if (capyPinataReset) {
-  capyPinataReset.addEventListener("click", resetCapyPinata);
-}
-
-applyCapySkin(capyPinataBtn?.dataset.capySkin || "pelucia");
-updateCapyPinataUI();
 
 
 // ---- 7) Menu mobile ----
