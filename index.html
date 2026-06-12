@@ -38,6 +38,9 @@
     </div>
   </section>
 
+  <!-- Barra de progresso de scroll -->
+  <div id="scrollProgress" aria-hidden="true"></div>
+
   <!-- Estrelas de fundo -->
   <div class="stars" aria-hidden="true"></div>
 
@@ -48,6 +51,7 @@
       <a href="#galeria">Galeria</a>
       <a href="#motivos">Motivos</a>
       <a href="#acordo">Acordo</a>
+      <a href="#puzzle">Quebra-cabeça</a>
       <a href="#final">Final</a>
     </nav>
     <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
@@ -58,6 +62,7 @@
     <a href="#galeria" class="mnav-link">Galeria</a>
     <a href="#motivos" class="mnav-link">Motivos</a>
     <a href="#acordo" class="mnav-link">Acordo</a>
+    <a href="#puzzle" class="mnav-link">Quebra-cabeça</a>
     <a href="#final" class="mnav-link">Final</a>
   </nav>
 
@@ -125,12 +130,7 @@
             <span class="tl-date">13/06/2024</span>
             <h3>✨ O começo</h3>
             <p>Tudo começou aqui — o dia mais importante da nossa história. O universo conspirou pra gente.</p>
-            <div class="media-slot tl-media" data-src="assets/tl1.svg" data-alt="O começo" data-empty="📷 Adicione uma foto ou vídeo"></div>
-            <button class="btn btn--ghost tl-expand-btn" type="button" aria-expanded="false">Ver mais</button>
-            <div class="tl-details">
-              <p class="tl-details__text">Aqui você pode escrever um texto maior contando detalhes desse dia: onde estavam, o que sentiram e por que isso mudou tudo.</p>
-              <div class="media-slot" data-src="" data-alt="Detalhes do começo" data-empty="🎬 Adicione foto/vídeo extra deste momento"></div>
-            </div>
+            <div class="media-slot tl-media" data-src="assets/ocomeco.mp4" data-alt="O começo" data-empty="📷 Adicione uma foto ou vídeo"></div>
           </div>
         </div>
 
@@ -139,13 +139,8 @@
           <div class="card tl-card">
             <span class="tl-date">🍿 Maratona Big Bang</span>
             <h3>Bazinga!</h3>
-            <p>Aquele episódio que a gente assistiu junto e ficou citando por dias. "No se puede."</p>
+            <p>Aquele episódio que a gente assistiu junto e ficou citando por dias. "Leonard e Penny."</p>
             <div class="media-slot tl-media" data-src="assets/tl2.svg" data-alt="Maratona Big Bang" data-empty="📷 Adicione uma foto ou vídeo"></div>
-            <button class="btn btn--ghost tl-expand-btn" type="button" aria-expanded="false">Ver mais</button>
-            <div class="tl-details">
-              <p class="tl-details__text">Conte aqui a piada interna completa, a cena favorita e como virou tradição de vocês.</p>
-              <div class="media-slot" data-src="" data-alt="Detalhes da maratona" data-empty="🎬 Adicione foto/vídeo extra deste momento"></div>
-            </div>
           </div>
         </div>
 
@@ -156,11 +151,6 @@
             <h3>Um dia simples, perfeito</h3>
             <p>Um dia que foi especial não pelo que aconteceu, mas por estar com você.</p>
             <div class="media-slot tl-media" data-src="assets/tl3.svg" data-alt="Nosso favorito" data-empty="📷 Adicione uma foto ou vídeo"></div>
-            <button class="btn btn--ghost tl-expand-btn" type="button" aria-expanded="false">Ver mais</button>
-            <div class="tl-details">
-              <p class="tl-details__text">Descreva aqui tudo que fez esse dia ser inesquecível: a comida, a conversa, o abraço e a sensação de paz.</p>
-              <div class="media-slot" data-src="" data-alt="Detalhes do momento favorito" data-empty="🎬 Adicione foto/vídeo extra deste momento"></div>
-            </div>
           </div>
         </div>
 
@@ -171,11 +161,6 @@
             <h3>🎂 2 anos!</h3>
             <p>Dois anos que provam que a gente funciona em qualquer universo. Aqui estamos. 💜</p>
             <div class="media-slot tl-media" data-src="assets/tl4.svg" data-alt="2 anos" data-empty="📷 Adicione uma foto ou vídeo"></div>
-            <button class="btn btn--ghost tl-expand-btn" type="button" aria-expanded="false">Ver mais</button>
-            <div class="tl-details">
-              <p class="tl-details__text">Use este espaço para registrar a mensagem mais especial do aniversário e o que vocês sonham para os próximos capítulos.</p>
-              <div class="media-slot" data-src="" data-alt="Detalhes de 2 anos" data-empty="🎬 Adicione foto/vídeo extra deste momento"></div>
-            </div>
           </div>
         </div>
 
@@ -215,7 +200,7 @@
         </button>
       </div>
 
-      <p class="hint gallery-hint">💡 Substitua os arquivos em <code>assets/</code> pelas suas fotos.</p>
+      <p class="hint gallery-hint">💡 Clique em qualquer foto para fazer upload da sua imagem.</p>
     </section>
 
     <!-- ========= MOTIVOS ========= -->
@@ -301,6 +286,35 @@
         <div id="contractStamp" class="contract-stamp" aria-live="polite">✅ Acordo oficializado</div>
 
         <p class="contract-footer">Firmado em 13 de junho de 2024. Validade: para sempre.</p>
+      </div>
+    </section>
+
+    <!-- ========= QUEBRA-CABEÇA ========= -->
+    <section id="puzzle" class="section reveal">
+      <h2>🧩 Quebra-Cabeça do Amor</h2>
+      <p class="section__subtitle">Monte as peças e descubra a mensagem escondida.</p>
+
+      <div class="puzzle-wrap">
+        <p class="puzzle-photo-label">Escolha a foto:</p>
+        <div class="puzzle-photo-select" id="puzzlePhotoSelect" role="radiogroup" aria-label="Escolha a foto do quebra-cabeça">
+          <button class="puzzle-photo-btn active" data-photo="assets/foto-casal-1.jpeg" type="button" aria-label="Foto 1" style="background-image:url('assets/foto-casal-1.jpeg')"></button>
+          <button class="puzzle-photo-btn" data-photo="assets/foto-casal-2.jpeg" type="button" aria-label="Foto 2" style="background-image:url('assets/foto-casal-2.jpeg')"></button>
+          <button class="puzzle-photo-btn" data-photo="assets/foto-casal-3.jpeg" type="button" aria-label="Foto 3" style="background-image:url('assets/foto-casal-3.jpeg')"></button>
+          <button class="puzzle-photo-btn" data-photo="assets/foto-casal-4.jpeg" type="button" aria-label="Foto 4" style="background-image:url('assets/foto-casal-4.jpeg')"></button>
+        </div>
+
+        <div class="puzzle-board" id="puzzleBoard" role="grid" aria-label="Quebra-cabeça deslizante 3x3"></div>
+
+        <div class="puzzle-status">
+          <span id="puzzleMoves">Movimentos: 0</span>
+          <button class="btn btn--ghost puzzle-shuffle-btn" id="puzzleShuffle" type="button">🔀 Embaralhar</button>
+        </div>
+
+        <div class="puzzle-solved" id="puzzleSolved" aria-hidden="true">
+          <p class="puzzle-solved__emoji">💗</p>
+          <p class="puzzle-solved__msg">Você montou o nosso amor!</p>
+          <a class="btn btn--primary" href="#final">Continuar ↓</a>
+        </div>
       </div>
     </section>
 
