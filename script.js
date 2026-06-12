@@ -1036,6 +1036,33 @@ document.addEventListener("keydown", (event) => {
   shuffle();
 }());
 
+// ---- 11.5) Botão APERTE — Bazinga com explosões ----
+(function () {
+  const btn = document.getElementById("btnBazingaPuzzle");
+  const display = document.getElementById("bazingaMode");
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    // Várias ondas de confete com delay
+    confettiBlast(300);
+    setTimeout(() => confettiBlast(250), 300);
+    setTimeout(() => confettiBlast(200), 600);
+    setTimeout(() => confettiBlast(180), 950);
+
+    // Mostra o BAZINGA na tela
+    if (display) {
+      display.classList.remove("show");
+      void display.offsetWidth;
+      display.classList.add("show");
+      setTimeout(() => display.classList.remove("show"), 2200);
+    }
+
+    // Animação do botão
+    btn.classList.add("btn--bazinga--fired");
+    setTimeout(() => btn.classList.remove("btn--bazinga--fired"), 600);
+  });
+}());
+
 // ---- 12) Scroll progress bar ----
 (function () {
   const progressBar = document.getElementById("scrollProgress");

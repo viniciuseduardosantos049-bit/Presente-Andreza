@@ -1639,3 +1639,32 @@ h1 {
 .puzzle-tile--empty {
   background-image: none !important;
 }
+
+/* ---- Botão APERTE ---- */
+.btn--bazinga {
+  display: block;
+  margin: 28px auto 0;
+  padding: 16px 48px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(135deg, #ff5fa2, #7c4dff);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 6px 28px rgba(124,77,255,.38);
+  transition: transform .15s ease, box-shadow .15s ease;
+  position: relative;
+  overflow: hidden;
+}
+.btn--bazinga:hover {
+  transform: scale(1.06);
+  box-shadow: 0 10px 36px rgba(255,95,162,.45);
+}
+.btn--bazinga:active,
+.btn--bazinga--fired {
+  transform: scale(.94);
+  box-shadow: 0 2px 12px rgba(124,77,255,.25);
+}
