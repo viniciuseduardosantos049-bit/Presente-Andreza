@@ -103,13 +103,13 @@ function sendJson(res, statusCode, payload) {
 	res.end(body);
 }
 
-function readRequestBody(req) {
+function readRequestBody(req, maxBytes = 10_000_000) {
 	return new Promise((resolve, reject) => {
 		let raw = "";
 
 		req.on("data", (chunk) => {
 			raw += chunk;
-			if (raw.length > 1_000_000) {
+			if (raw.length > maxBytes) {
 				reject(new Error("Payload muito grande"));
 				req.destroy();
 			}
@@ -330,6 +330,42 @@ function streamContractPdf(res, payload, options = {}) {
 	return;
 }
 
+async function handleSaveMedia(req, res) {
+	try {
+		const body = await readRequestBody(req, 10_000_000);
+		const { key, dataUrl, position } = body;
+
+		if (typeof key !== "number" && typeof key !== "string") {
+			return sendJson(res, 400, { ok: false, message: "key obrigatorio" });
+		}
+		if (!dataUrl || !dataUrl.startsWith("data:")) {
+			return sendJson(res, 400, { ok: false, message: "dataUrl invalido" });
+		}
+
+		const matches = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
+		if (!matches) {
+			return sendJson(res, 400, { ok: false, message: "dataUrl mal formatado" });
+		}
+
+		const [, mime, b64] = matches;
+		const ext = mime.includes("png") ? "png" : "jpg";
+		const filename = `slot-${key}.${ext}`;
+		const filepath = path.join(ROOT_DIR, "assets", filename);
+
+		await fs.promises.writeFile(filepath, Buffer.from(b64, "base64"));
+
+		const savedPosition = position || null;
+		if (savedPosition) {
+			const metaPath = path.join(ROOT_DIR, "assets", `slot-${key}.meta.json`);
+			await fs.promises.writeFile(metaPath, JSON.stringify({ position: savedPosition }));
+		}
+
+		return sendJson(res, 200, { ok: true, path: `assets/${filename}`, position: savedPosition });
+	} catch (err) {
+		return sendJson(res, 500, { ok: false, message: err.message });
+	}
+}
+
 async function handleContractPdf(req, res) {
 	try {
 		const body = await readRequestBody(req);
@@ -456,6 +492,10 @@ function serveStatic(req, res, pathname) {
 
 const server = http.createServer(async (req, res) => {
 	const requestUrl = new URL(req.url, `http://${req.headers.host}`);
+
+	if (req.method === "POST" && requestUrl.pathname === "/api/save-media") {
+		return handleSaveMedia(req, res);
+	}
 
 	if (req.method === "POST" && requestUrl.pathname === "/api/contract-pdf") {
 		return handleContractPdf(req, res);

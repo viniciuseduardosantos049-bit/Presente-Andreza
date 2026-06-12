@@ -442,91 +442,16 @@ function isVideoFile(src = "") {
   return /\.(mp4|webm|ogg|mov)(\?|#|$)/i.test(src);
 }
 
-function clearMediaFallback(container) {
-  container.classList.remove("media-slot--empty");
-  container.innerHTML = "";
-}
-
-// ---- Upload de imagens ----
-const _uploadInput = document.createElement("input");
-_uploadInput.type = "file";
-_uploadInput.accept = "image/*";
-_uploadInput.style.display = "none";
-document.body.appendChild(_uploadInput);
-let _activeUploadSlot = null;
-
-function openUploadFor(slot) {
-  _activeUploadSlot = slot;
-  _uploadInput.value = "";
-  _uploadInput.click();
-}
-
-function _compressImage(file) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      const MAX = 1200;
-      let w = img.width, h = img.height;
-      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
-      const canvas = document.createElement("canvas");
-      canvas.width = w; canvas.height = h;
-      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-      URL.revokeObjectURL(url);
-      resolve(canvas.toDataURL("image/jpeg", 0.85));
-    };
-    img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
-    img.src = url;
-  });
-}
-
-_uploadInput.addEventListener("change", async () => {
-  const file = _uploadInput.files[0];
-  const slot = _activeUploadSlot;
-  _activeUploadSlot = null;
-  if (!slot || !file) return;
-  const dataUrl = await _compressImage(file);
-  if (!dataUrl) return;
-  slot.dataset.src = dataUrl;
-  if (slot.dataset.slotKey !== undefined) {
-    try { localStorage.setItem("mediaSlot_" + slot.dataset.slotKey, dataUrl); } catch (_) {}
-  }
-  renderMedia(slot);
-  const photoBtn = slot.closest(".photo");
-  if (photoBtn) photoBtn.dataset.src = dataUrl;
-});
-
 function renderMedia(container) {
   if (!container) return;
-
   const src = container.dataset.src || "";
   const alt = container.dataset.alt || "Mídia";
-  const emptyText = container.dataset.empty || "📷 Adicione uma foto ou vídeo";
-
   container.innerHTML = "";
-
-  if (!src) {
-    container.classList.add("media-slot--empty");
-    container.innerHTML = `
-      <span class="media-slot__empty">${emptyText}</span>
-      <button type="button" class="media-slot__upload-empty-btn" title="Fazer upload">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Enviar foto
-      </button>
-    `;
-    container.querySelector(".media-slot__upload-empty-btn").addEventListener("click", (e) => {
-      e.stopPropagation();
-      openUploadFor(container);
-    });
-    return;
-  }
-
-  container.classList.remove("media-slot--empty");
+  if (!src) return;
 
   if (isVideoFile(src)) {
     const video = document.createElement("video");
     video.src = src;
-    video.alt = alt;
     video.controls = false;
     video.preload = "metadata";
     video.playsInline = true;
@@ -534,166 +459,20 @@ function renderMedia(container) {
     video.autoplay = true;
     video.loop = true;
     video.className = "media-slot__asset media-slot__video";
-    video.addEventListener("error", () => {
-      container.classList.add("media-slot--empty");
-      container.innerHTML = `<span class="media-slot__empty">${emptyText}</span>`;
-    });
     container.appendChild(video);
   } else {
     const img = document.createElement("img");
     img.src = src;
     img.alt = alt;
     img.className = "media-slot__asset media-slot__image";
-
-    // Restaura posição salva
-    const savedPos = container.dataset.slotKey !== undefined
-      ? localStorage.getItem("mediaSlotPos_" + container.dataset.slotKey)
-      : null;
-    if (savedPos) img.style.objectPosition = savedPos;
-
-    img.addEventListener("error", () => {
-      container.classList.add("media-slot--empty");
-      container.innerHTML = `<span class="media-slot__empty">${emptyText}</span>`;
-    });
-    container.appendChild(img);
-
-    // Botão de ajustar posição
-    const adjustBtn = document.createElement("button");
-    adjustBtn.type = "button";
-    adjustBtn.className = "media-slot__adjust-btn";
-    adjustBtn.title = "Ajustar posição da foto";
-    adjustBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>`;
-    adjustBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggleAdjustMode(container, img, adjustBtn);
-    });
-    container.appendChild(adjustBtn);
-  }
-
-  const uploadBtn = document.createElement("button");
-  uploadBtn.type = "button";
-  uploadBtn.className = "media-slot__upload-btn";
-  uploadBtn.title = "Trocar imagem";
-  uploadBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`;
-  uploadBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    openUploadFor(container);
-  });
-  container.appendChild(uploadBtn);
-}
-
-function toggleAdjustMode(container, img, adjustBtn) {
-  if (container.classList.contains("media-slot--adjusting")) {
-    exitAdjustMode(container, img, adjustBtn);
-  } else {
-    enterAdjustMode(container, img, adjustBtn);
-  }
-}
-
-function enterAdjustMode(container, img, adjustBtn) {
-  container.classList.add("media-slot--adjusting");
-  adjustBtn.title = "Confirmar posição";
-  adjustBtn.classList.add("media-slot__adjust-btn--active");
-
-  // Pega posição atual
-  const posStr = img.style.objectPosition || "50% 50%";
-  const parts  = posStr.split(" ");
-  let posX = parseFloat(parts[0]) || 50;
-  let posY = parseFloat(parts[1]) || 50;
-
-  let isDragging = false;
-  let startX, startY, startPosX, startPosY;
-
-  function onDown(e) {
-    isDragging = true;
-    const touch = e.touches ? e.touches[0] : e;
-    startX    = touch.clientX;
-    startY    = touch.clientY;
-    startPosX = posX;
-    startPosY = posY;
-    e.preventDefault();
-  }
-
-  function onMove(e) {
-    if (!isDragging) return;
-    const touch = e.touches ? e.touches[0] : e;
-    const dx = touch.clientX - startX;
-    const dy = touch.clientY - startY;
-    // Sensibilidade: quanto menor, mais fino o controle
-    posX = Math.max(0, Math.min(100, startPosX - dx * 0.25));
-    posY = Math.max(0, Math.min(100, startPosY - dy * 0.25));
-    img.style.objectPosition = `${posX.toFixed(1)}% ${posY.toFixed(1)}%`;
-    e.preventDefault();
-  }
-
-  function onUp() { isDragging = false; }
-
-  img.addEventListener("mousedown",  onDown);
-  img.addEventListener("touchstart", onDown, { passive: false });
-  document.addEventListener("mousemove",  onMove);
-  document.addEventListener("touchmove",  onMove, { passive: false });
-  document.addEventListener("mouseup",  onUp);
-  document.addEventListener("touchend", onUp);
-
-  // Guarda cleanup + posição final ao sair
-  container._adjustExit = () => {
-    img.removeEventListener("mousedown",  onDown);
-    img.removeEventListener("touchstart", onDown);
-    document.removeEventListener("mousemove",  onMove);
-    document.removeEventListener("touchmove",  onMove);
-    document.removeEventListener("mouseup",  onUp);
-    document.removeEventListener("touchend", onUp);
-
-    // Salva posição no localStorage
-    if (container.dataset.slotKey !== undefined) {
-      localStorage.setItem(
-        "mediaSlotPos_" + container.dataset.slotKey,
-        `${posX.toFixed(1)}% ${posY.toFixed(1)}%`
-      );
+    if (container.dataset.position) {
+      img.style.objectPosition = container.dataset.position;
     }
-  };
-}
-
-function exitAdjustMode(container, img, adjustBtn) {
-  if (container._adjustExit) {
-    container._adjustExit();
-    delete container._adjustExit;
+    container.appendChild(img);
   }
-  container.classList.remove("media-slot--adjusting");
-  adjustBtn.title = "Ajustar posição da foto";
-  adjustBtn.classList.remove("media-slot__adjust-btn--active");
 }
 
 document.querySelectorAll(".media-slot").forEach(renderMedia);
-
-// Atribui chaves, restaura do localStorage e ativa clique nos slots vazios
-document.querySelectorAll(".media-slot").forEach((slot, i) => {
-  slot.dataset.slotKey = i;
-  const saved = localStorage.getItem("mediaSlot_" + i);
-  // Só restaura do localStorage se o slot não tiver uma fonte fixa no HTML
-  // (fontes fixas são arquivos reais como .mp4/.jpeg; placeholders .svg são substituíveis)
-  const currentSrc = slot.dataset.src || "";
-  const isPlaceholder = !currentSrc || currentSrc.endsWith(".svg");
-  if (saved && isPlaceholder) {
-    slot.dataset.src = saved;
-    renderMedia(slot);
-    const photoBtn = slot.closest(".photo");
-    if (photoBtn) photoBtn.dataset.src = saved;
-  }
-
-  // Restaura posição salva (para slots com imagem já renderizada)
-  const savedPos = localStorage.getItem("mediaSlotPos_" + i);
-  if (savedPos) {
-    const img = slot.querySelector(".media-slot__image");
-    if (img) img.style.objectPosition = savedPos;
-  }
-  slot.addEventListener("click", (e) => {
-    if (slot.classList.contains("media-slot--empty")) {
-      e.stopPropagation();
-      openUploadFor(slot);
-    }
-  });
-});
 
 
 // ---- 4) Modal da galeria ----

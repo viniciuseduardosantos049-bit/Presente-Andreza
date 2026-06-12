@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Migrar fotos — Nosso Universo</title>
+  <style>
+    body { font-family: system-ui; background: #fff6fb; padding: 40px; color: #2a2430; }
+    h1 { color: #7c4dff; }
+    button { background: linear-gradient(135deg, #ff5fa2, #7c4dff); color: #fff; border: none; border-radius: 12px; padding: 14px 32px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 16px; }
+    button:disabled { opacity: .5; cursor: default; }
+    #log { margin-top: 24px; background: #fff; border-radius: 12px; padding: 20px; min-height: 80px; border: 1px solid #ffd1e6; }
+    .ok { color: #2e7d32; } .err { color: #c62828; } .info { color: #555; }
+    #result { margin-top: 20px; background: #e8dfff; border-radius: 12px; padding: 16px; display: none; }
+    pre { background: #2a2430; color: #ffd1e6; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: .85rem; }
+  </style>
+</head>
+<body>
+  <h1>📷 Migrar fotos para o servidor</h1>
+  <p>Clique no botão abaixo para salvar todas as fotos que estão no localStorage como arquivos físicos no projeto.</p>
+  <button id="btnMigrate">Migrar todas as fotos agora</button>
+  <div id="log"><span class="info">Aguardando...</span></div>
+  <div id="result">
+    <h3>✅ Migração concluída! Copie os caminhos abaixo para atualizar o index.html:</h3>
+    <pre id="resultPre"></pre>
+  </div>
+
+  <script>
+    const log = document.getElementById('log');
+    const btn = document.getElementById('btnMigrate');
+
+    function addLine(msg, cls = 'info') {
+      const p = document.createElement('p');
+      p.className = cls;
+      p.style.margin = '4px 0';
+      p.textContent = msg;
+      log.appendChild(p);
+    }
+
+    btn.addEventListener('click', async () => {
+      log.innerHTML = '';
+      btn.disabled = true;
+
+      const results = {};
+      let found = 0;
+
+      for (let i = 0; i < 20; i++) {
+        const dataUrl = localStorage.getItem('mediaSlot_' + i);
+        if (!dataUrl || dataUrl.endsWith('.svg') || !dataUrl.startsWith('data:')) continue;
+
+        found++;
+        const position = localStorage.getItem('mediaSlotPos_' + i) || null;
+        addLine(`Salvando slot ${i}...`);
+
+        try {
+          const res = await fetch('/api/save-media', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key: i, dataUrl, position })
+          });
+          const data = await res.json();
+          if (data.ok) {
+            results[i] = { path: data.path, position: data.position };
+            addLine(`✅ Slot ${i} → ${data.path}${position ? ' | posição: ' + position : ''}`, 'ok');
+          } else {
+            addLine(`❌ Slot ${i}: ${data.message}`, 'err');
+          }
+        } catch (e) {
+          addLine(`❌ Slot ${i}: ${e.message}`, 'err');
+        }
+      }
+
+      if (found === 0) {
+        addLine('Nenhuma foto encontrada no localStorage.', 'info');
+      } else {
+        const pre = document.getElementById('resultPre');
+        pre.textContent = JSON.stringify(results, null, 2);
+        document.getElementById('result').style.display = 'block';
+        addLine(`Migração finalizada. ${Object.keys(results).length} foto(s) salva(s).`, 'ok');
+      }
+
+      btn.disabled = false;
+    });
+  </script>
+</body>
+</html>
