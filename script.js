@@ -9,6 +9,82 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+// ---- 0.2) Banner de instalação do app (PWA) ----
+(function () {
+  const DISMISS_KEY = "nosso-universo-install-dismissed";
+  const DISMISS_DAYS = 7;
+
+  const banner = document.getElementById("installBanner");
+  const installBtn = document.getElementById("installBannerInstall");
+  const dismissBtn = document.getElementById("installBannerDismiss");
+  const closeBtn = document.getElementById("installBannerClose");
+  const iosModal = document.getElementById("modalInstallIos");
+  const iosCloseBtn = document.getElementById("installIosClose");
+
+  if (!banner) return;
+
+  const isStandalone =
+    window.matchMedia?.("(display-mode: standalone)").matches || window.navigator.standalone === true;
+
+  const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent) && !window.MSStream;
+
+  function wasRecentlyDismissed() {
+    const dismissedAt = Number(localStorage.getItem(DISMISS_KEY) || 0);
+    if (!dismissedAt) return false;
+    const days = (Date.now() - dismissedAt) / (1000 * 60 * 60 * 24);
+    return days < DISMISS_DAYS;
+  }
+
+  function dismiss() {
+    banner.hidden = true;
+    localStorage.setItem(DISMISS_KEY, String(Date.now()));
+  }
+
+  function showBanner() {
+    if (isStandalone || wasRecentlyDismissed()) return;
+    banner.hidden = false;
+  }
+
+  dismissBtn?.addEventListener("click", dismiss);
+  closeBtn?.addEventListener("click", dismiss);
+  iosCloseBtn?.addEventListener("click", () => iosModal?.close());
+
+  let deferredPrompt = null;
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredPrompt = event;
+    showBanner();
+  });
+
+  window.addEventListener("appinstalled", () => {
+    banner.hidden = true;
+    deferredPrompt = null;
+  });
+
+  installBtn?.addEventListener("click", async () => {
+    if (deferredPrompt) {
+      banner.hidden = true;
+      await deferredPrompt.prompt();
+      deferredPrompt = null;
+      return;
+    }
+
+    if (isIos) {
+      banner.hidden = true;
+      iosModal?.showModal();
+      return;
+    }
+
+    banner.hidden = true;
+  });
+
+  // iOS não dispara beforeinstallprompt — mostramos o convite manualmente
+  if (isIos && !isStandalone && !wasRecentlyDismissed()) {
+    setTimeout(showBanner, 2500);
+  }
+}());
+
 // ---- 0.5) Música de fundo (YouTube IFrame API) ----
 let bgPlayer = null;
 let bgPlayerReady = false;

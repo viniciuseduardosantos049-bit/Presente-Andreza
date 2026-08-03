@@ -416,6 +416,36 @@
 
   <canvas id="confetti"></canvas>
 
+  <!-- Banner de instalação do app (PWA) -->
+  <div id="installBanner" class="install-banner" hidden>
+    <div class="install-banner__icon">💗</div>
+    <div class="install-banner__copy">
+      <p class="install-banner__title">Leva a gente com você</p>
+      <p class="install-banner__text">Instale o Nosso Universo na tela inicial e abra sempre que quiser lembrar da nossa história.</p>
+      <div class="install-banner__actions">
+        <button class="btn btn--primary install-banner__btn" id="installBannerInstall" type="button">Instalar</button>
+        <button class="btn btn--ghost install-banner__btn" id="installBannerDismiss" type="button">Agora não</button>
+      </div>
+    </div>
+    <button class="install-banner__close" id="installBannerClose" type="button" aria-label="Fechar aviso de instalação">✕</button>
+  </div>
+
+  <!-- Modal com instruções de instalação (iOS Safari) -->
+  <dialog class="modal modal--install-ios" id="modalInstallIos">
+    <div class="modal__content">
+      <button class="modal__close" id="installIosClose" aria-label="Fechar">✕</button>
+      <div class="install-ios">
+        <p class="install-ios__emoji">💗</p>
+        <h2>Leva a gente com você</h2>
+        <ol class="install-ios__steps">
+          <li>Toca no ícone de <strong>compartilhar</strong> <span class="install-ios__key">⬆️</span> na barra do Safari.</li>
+          <li>Escolhe <strong>"Adicionar à Tela de Início"</strong>.</li>
+          <li>Toca em <strong>Adicionar</strong>. Prontinho, agora é seu 💜</li>
+        </ol>
+      </div>
+    </div>
+  </dialog>
+
   <!-- Player de fundo (oculto) -->
   <div id="bgMusicPlayer" style="position:fixed;width:0;height:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
     <div id="ytBgPlayer"></div>

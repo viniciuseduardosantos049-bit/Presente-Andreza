@@ -1580,3 +1580,95 @@ h1 {
   transform: scale(.94);
   box-shadow: 0 2px 12px rgba(124,77,255,.25);
 }
+
+/* ---- Banner de instalação (PWA) ---- */
+.install-banner {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 90;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 16px 16px 14px;
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(255,95,162,.22);
+  box-shadow: var(--shadow);
+  animation: installBannerIn .4s cubic-bezier(.34,1.56,.64,1);
+}
+.install-banner[hidden] { display: none; }
+
+@keyframes installBannerIn {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.install-banner__icon {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  background: var(--pink-2);
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+}
+.install-banner__copy { flex: 1; min-width: 0; }
+.install-banner__title {
+  margin: 0 0 4px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+}
+.install-banner__text {
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #6f5f72;
+}
+.install-banner__actions { display: flex; gap: 8px; }
+.install-banner__btn { padding: 9px 16px; font-size: 13px; }
+.install-banner__close {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #9a8a9d;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+}
+.install-banner__close:hover { background: var(--pink-2); color: var(--ink); }
+
+@media (max-width: 480px) {
+  .install-banner { left: 12px; right: 12px; bottom: 12px; max-width: none; }
+}
+
+/* ---- Modal de instruções de instalação (iOS) ---- */
+.install-ios { text-align: center; padding: 24px 12px 8px; }
+.install-ios__emoji { font-size: 40px; margin: 0 0 8px; }
+.install-ios h2 { margin: 0 0 18px; font-size: 22px; }
+.install-ios__steps {
+  text-align: left;
+  max-width: 380px;
+  margin: 0 auto;
+  padding: 0 0 0 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14.5px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.install-ios__key {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--pink-2);
+}
