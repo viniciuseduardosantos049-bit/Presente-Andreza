@@ -2,6 +2,13 @@
    NOSSO UNIVERSO — 2 ANOS  |  script.js
    ============================================== */
 
+// ---- 0.1) Registro do Service Worker (PWA) ----
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  });
+}
+
 // ---- 0.5) Música de fundo (YouTube IFrame API) ----
 let bgPlayer = null;
 let bgPlayerReady = false;
