@@ -1,0 +1,8 @@
+[build]
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/contract-pdf"
+  to = "/.netlify/functions/contract-pdf"
+  status = 200
+  force = true

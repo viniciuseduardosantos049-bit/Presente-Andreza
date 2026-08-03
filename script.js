@@ -371,6 +371,14 @@ if (timelinePull && timelineYarn && timelineReveal) {
     timelineReveal.style.opacity = `${0.2 + progress * 0.8}`;
     timelineReveal.classList.toggle("is-open", progress >= 0.999);
 
+    // No iOS, play() chamado enquanto o clip-path zera a área visível falha
+    // silenciosamente e não retoma depois — força retry assim que houver área revelada
+    if (progress > 0) {
+      timelineReveal.querySelectorAll("video").forEach((video) => {
+        if (video.paused) video.play().catch(() => {});
+      });
+    }
+
     timelineYarn.setAttribute("aria-valuenow", `${Math.round(progress * 100)}`);
 
     if (timelinePullHint) {
@@ -453,13 +461,27 @@ function renderMedia(container) {
     const video = document.createElement("video");
     video.src = src;
     video.controls = false;
-    video.preload = "metadata";
-    video.playsInline = true;
+    video.preload = "auto";
+    video.setAttribute("playsinline", "");
+    video.setAttribute("muted", "");
     video.muted = true;
     video.autoplay = true;
     video.loop = true;
     video.className = "media-slot__asset media-slot__video";
+    // Fallback explícito para mobile onde autoplay falha silenciosamente
+    video.addEventListener("canplay", () => { video.play().catch(() => {}); }, { once: true });
     container.appendChild(video);
+
+    // Retry quando o vídeo realmente entra em área visível (ex.: saindo de um
+    // container com clip-path zerado), já que o play() inicial pode ter falhado
+    const visibilityRetry = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0 && video.paused) {
+          video.play().catch(() => {});
+        }
+      });
+    }, { threshold: 0.01 });
+    visibilityRetry.observe(video);
   } else {
     const img = document.createElement("img");
     img.src = src;
@@ -839,6 +861,60 @@ document.addEventListener("keydown", (event) => {
     // Animação do botão
     btn.classList.add("btn--bazinga--fired");
     setTimeout(() => btn.classList.remove("btn--bazinga--fired"), 600);
+  });
+}());
+
+// ---- 11.8) Download PDF do contrato ----
+(function () {
+  const statusEl = document.getElementById("contractPdfStatus");
+
+  document.querySelectorAll(".contract-pdf-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const variant = btn.dataset.variant || "romantico";
+
+      const signYou = (localStorage.getItem("nosso-universo-signature-you") || "").trim();
+      const signHer = (localStorage.getItem("nosso-universo-signature-her") || "").trim();
+
+      if (!signYou || !signHer) {
+        if (statusEl) statusEl.textContent = "⚠️ Assine o contrato antes de baixar o PDF.";
+        return;
+      }
+
+      if (statusEl) statusEl.textContent = "⏳ Gerando PDF...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch("/api/contract-pdf", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            signedAt: "13/06/2024",
+            signYou,
+            signHer,
+            variant
+          })
+        });
+
+        if (!res.ok) throw new Error("Falha ao gerar PDF");
+
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `acordo-namoro-nosso-universo.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+
+        if (statusEl) statusEl.textContent = "✅ PDF baixado com sucesso!";
+        setTimeout(() => { if (statusEl) statusEl.textContent = ""; }, 3000);
+      } catch (err) {
+        if (statusEl) statusEl.textContent = "❌ Erro ao gerar PDF. Tente novamente.";
+      } finally {
+        btn.disabled = false;
+      }
+    });
   });
 }());
 

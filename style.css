@@ -1015,6 +1015,40 @@ h1 {
   text-align: right;
 }
 
+/* ---- PDF do contrato ---- */
+.contract-pdf-area {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--pink-2);
+  text-align: center;
+}
+.contract-pdf-hint {
+  font-size: 13px;
+  color: var(--violet);
+  margin: 0 0 12px;
+  font-weight: 600;
+}
+.contract-pdf-variants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.contract-pdf-btn {
+  font-size: 13px;
+  padding: 8px 18px;
+}
+.contract-pdf-btn:disabled {
+  opacity: .5;
+  cursor: default;
+}
+.contract-pdf-status {
+  font-size: 13px;
+  margin: 10px 0 0;
+  min-height: 20px;
+  color: var(--violet);
+}
+
 /* ---- Final ---- */
 .final {
   padding-bottom: 130px;

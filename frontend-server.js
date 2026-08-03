@@ -6,6 +6,7 @@ const { execFile } = require("child_process");
 const { promisify } = require("util");
 require("dotenv").config();
 const PDFDocument = require("pdfkit");
+const { generatePdfBuffer } = require("./lib/pdf-generator");
 
 const execFileAsync = promisify(execFile);
 
@@ -369,11 +370,25 @@ async function handleSaveMedia(req, res) {
 async function handleContractPdf(req, res) {
 	try {
 		const body = await readRequestBody(req);
-		return streamContractPdf(res, body);
+		const { signedAt, signYou, signHer } = body;
+
+		if (!signedAt || !signYou || !signHer) {
+			return sendJson(res, 400, { ok: false, message: "Campos obrigatorios: signedAt, signYou, signHer" });
+		}
+
+		const pdfBuffer = await generatePdfBuffer(body);
+		const date = String(signedAt).replace(/\//g, "-");
+
+		res.writeHead(200, {
+			"Content-Type": "application/pdf",
+			"Content-Disposition": `attachment; filename="acordo-namoro-${date}.pdf"`,
+			"Content-Length": pdfBuffer.length
+		});
+		res.end(pdfBuffer);
 	} catch (error) {
 		return sendJson(res, 500, { ok: false, message: error.message || "Falha ao gerar PDF" });
 	}
-	}
+}
 
 function handleContractPdfExample(res, requestUrl) {
 	const variantKey = String(requestUrl.searchParams.get("variant") || "romantico").toLowerCase();
